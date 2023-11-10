@@ -3,14 +3,20 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Tenancy\Wallet;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasTenants
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -45,8 +51,26 @@ class User extends Authenticatable implements FilamentUser
         'password' => 'hashed',
     ];
 
+    public function wallets(): BelongsToMany
+    {
+        return $this->belongsToMany(Wallet::class);
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->wallets->contains($tenant);
+    }
+
+    /**
+     * @return array<Wallet> | Collection
+     */
+    public function getTenants(Panel $panel): array | Collection
+    {
+        return $this->wallets;
     }
 }
