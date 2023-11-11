@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Tenancy\EditWalletProfile;
+use App\Filament\Pages\Tenancy\RegisterWallet;
 use App\Models\Tenancy\Wallet;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -29,6 +31,8 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->tenant(Wallet::class)
+            ->tenantProfile(EditWalletProfile::class)
+            ->tenantRegistration(RegisterWallet::class)
             ->colors([
                 'primary' => Color::Amber,
             ])

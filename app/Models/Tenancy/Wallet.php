@@ -12,6 +12,8 @@ class Wallet extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $fillable = ['name', 'cover'];
+
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->using(UserWallet::class);
