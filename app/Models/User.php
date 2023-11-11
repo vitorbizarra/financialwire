@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Models\Tenancy\UserWallet;
 use App\Models\Tenancy\Wallet;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Collection;
@@ -18,7 +19,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements FilamentUser, HasTenants
+class User extends Authenticatable implements FilamentUser, HasTenants, HasName
 {
     use HasApiTokens, HasFactory, Notifiable, HasUuids;
 
@@ -28,7 +29,8 @@ class User extends Authenticatable implements FilamentUser, HasTenants
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
     ];
@@ -71,8 +73,13 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     /**
      * @return array<Wallet> | Collection
      */
-    public function getTenants(Panel $panel): array | Collection
+    public function getTenants(Panel $panel): array|Collection
     {
         return $this->wallets;
+    }
+
+    public function getFilamentName(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
     }
 }
