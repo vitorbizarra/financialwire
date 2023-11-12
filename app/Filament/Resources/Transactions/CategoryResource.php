@@ -18,7 +18,7 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-m-bookmark';
 
     public static function form(Form $form): Form
     {
@@ -38,6 +38,18 @@ class CategoryResource extends Resource
                             ->columns(3),
                         Forms\Components\ColorPicker::make('color')
                             ->required(),
+
+                        Forms\Components\Fieldset::make()
+                            ->columns(3)
+                            ->hidden(fn(?Category $record): bool => $record === null)
+                            ->schema([
+                                Forms\Components\Placeholder::make('created_at')
+                                    ->content(fn(Category $record): string => $record->created_at ?? '--'),
+                                Forms\Components\Placeholder::make('updated_at')
+                                    ->content(fn(Category $record): string => $record->updated_at ?? '--'),
+                                Forms\Components\Placeholder::make('deleted_at')
+                                    ->content(fn(Category $record): string => $record->deleted_at ?? '--'),
+                            ])
                     ])
             ]);
     }
@@ -72,11 +84,11 @@ class CategoryResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
