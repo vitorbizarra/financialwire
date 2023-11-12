@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Models\Tenancy\UserWallet;
 use App\Models\Tenancy\Wallet;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
@@ -19,7 +20,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements FilamentUser, HasTenants, HasName
+class User extends Authenticatable implements FilamentUser, HasTenants, HasName, HasAvatar
 {
     use HasApiTokens, HasFactory, Notifiable, HasUuids;
 
@@ -31,6 +32,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, HasName
     protected $fillable = [
         'first_name',
         'last_name',
+        'avatar',
         'email',
         'password',
     ];
@@ -81,5 +83,10 @@ class User extends Authenticatable implements FilamentUser, HasTenants, HasName
     public function getFilamentName(): string
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->avatar;
     }
 }
