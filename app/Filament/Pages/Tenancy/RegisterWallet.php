@@ -39,6 +39,8 @@ class RegisterWallet extends RegisterTenant
 
     protected function handleRegistration(array $data): Wallet
     {
+        $data['slug'] = str($data['name'])->slug();
+        
         $wallet = Wallet::create($data);
 
         $wallet->users()->attach(auth()->user());

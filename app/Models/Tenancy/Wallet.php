@@ -14,7 +14,7 @@ class Wallet extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ['name', 'cover'];
+    protected $fillable = ['name', 'slug', 'cover'];
 
     public function users(): BelongsToMany
     {
