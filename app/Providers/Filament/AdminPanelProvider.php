@@ -30,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->tenant(Wallet::class)
+            ->tenant(Wallet::class, slugAttribute: 'slug')
             ->tenantProfile(EditWalletProfile::class)
             ->tenantRegistration(RegisterWallet::class)
             ->colors([
