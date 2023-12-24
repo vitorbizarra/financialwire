@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->foreignUuid('wallet_id')->references('id')->on('wallets')->cascadeOnDelete();
             $table->string('name');
             $table->string('slug');
