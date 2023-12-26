@@ -12,6 +12,7 @@ class CreateCategory extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        $data['user_id'] = auth()->id();
         $data['slug'] = str($data['name'])->slug();
         return $data;
     }

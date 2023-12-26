@@ -13,7 +13,7 @@ class Category extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
 
-    protected $fillable = ['account_id', 'name', 'slug', 'icon', 'color'];
+    protected $fillable = ['user_id', 'account_id', 'name', 'slug', 'icon', 'color'];
 
     public function account(): BelongsTo
     {

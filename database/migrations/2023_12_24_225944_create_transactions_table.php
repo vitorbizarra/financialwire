@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->uuid('id');
+            $table->foreignUuid('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->string('transaction_type');
             $table->integer('amount');
             $table->date('date');
