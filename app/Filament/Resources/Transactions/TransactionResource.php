@@ -9,6 +9,7 @@ use App\Models\Transactions\Transaction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -62,10 +63,9 @@ class TransactionResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('category.name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('id')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('transaction_type')
-                    ->searchable(),
+                    ->badge()
+                    ->iconPosition(IconPosition::After),
                 Tables\Columns\TextColumn::make('amount')
                     ->numeric()
                     ->sortable(),
