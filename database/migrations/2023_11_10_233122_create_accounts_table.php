@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignUuid('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->string('name');
             $table->string('slug');
-            $table->string('cover')->nullable();
             $table->timestamps();
+
+            $table->unique(['user_id', 'slug']);
         });
     }
 
