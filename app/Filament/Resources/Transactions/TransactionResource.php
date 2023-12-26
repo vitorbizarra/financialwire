@@ -107,7 +107,20 @@ class TransactionResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\Filter::make('date')
+                    ->form([
+                        Forms\Components\DatePicker::make('startDate'),
+                        Forms\Components\DatePicker::make('endDate'),
+                    ])
+                    ->query(fn(Builder $query, array $data): Builder => $query->whereBetween('date', [$data['startDate'] ?? now()->startOfMonth(), $data['endDate'] ?? now()->endOfMonth()])),
+
+                Tables\Filters\SelectFilter::make('category_id')
+                    ->options(auth()->user()->categories->pluck('name', 'id'))
+                    ->multiple()
+                    ->preload(),
+
+                Tables\Filters\Filter::make('finished')
+                    ->query(fn(Builder $query) => $query->where('finished', true))
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
