@@ -2,9 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Pages\Tenancy\EditAccountProfile;
-use App\Filament\Pages\Tenancy\RegisterAccount;
-use App\Models\Tenancy\Account;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -30,9 +27,6 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->tenant(Account::class, slugAttribute: 'slug')
-            ->tenantProfile(EditAccountProfile::class)
-            ->tenantRegistration(RegisterAccount::class)
             ->colors([
                 'primary' => Color::Amber,
             ])

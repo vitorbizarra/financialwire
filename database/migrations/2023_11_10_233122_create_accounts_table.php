@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->string('name');
             $table->string('slug');
             $table->string('cover')->nullable();

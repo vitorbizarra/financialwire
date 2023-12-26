@@ -9,18 +9,18 @@ use App\Models\Tenancy\Account;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasName;
-use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements FilamentUser, HasTenants, HasName, HasAvatar
+class User extends Authenticatable implements FilamentUser, HasName, HasAvatar
 {
     use HasApiTokens, HasFactory, Notifiable, HasUuids;
 
@@ -57,27 +57,14 @@ class User extends Authenticatable implements FilamentUser, HasTenants, HasName,
         'password' => 'hashed',
     ];
 
-    public function accounts(): BelongsToMany
+    public function accounts(): HasMany
     {
-        return $this->belongsToMany(Account::class)->using(UserAccount::class);
+        return $this->hasMany(Account::class);
     }
 
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
-    }
-
-    public function canAccessTenant(Model $tenant): bool
-    {
-        return $this->accounts->contains($tenant);
-    }
-
-    /**
-     * @return array<Account> | Collection
-     */
-    public function getTenants(Panel $panel): array|Collection
-    {
-        return $this->accounts;
     }
 
     public function getFilamentName(): string
