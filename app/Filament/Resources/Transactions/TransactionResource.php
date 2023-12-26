@@ -9,6 +9,7 @@ use App\Models\Transactions\Transaction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -58,23 +59,28 @@ class TransactionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('date', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('account.name')
+                Tables\Columns\ToggleColumn::make('finished')
+                    ->alignCenter(),
+                Tables\Columns\TextColumn::make('date')
+                    ->date('d/m/Y')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('description')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('category.name')
-                    ->searchable(),
+                    ->searchable()
+                    ->badge()
+                    ->icon(fn($record) => $record->category->icon)
+                    ->color(fn($record) => Color::hex($record->category->color)),
                 Tables\Columns\TextColumn::make('transaction_type')
                     ->badge()
-                    ->iconPosition(IconPosition::After),
+                    ->iconPosition(IconPosition::After)
+                    ->alignCenter(),
                 Tables\Columns\TextColumn::make('amount')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\IconColumn::make('finished')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('description')
+                Tables\Columns\TextColumn::make('account.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
