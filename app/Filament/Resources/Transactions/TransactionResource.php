@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Transactions;
 
+use App\Enums\TransactionType;
 use App\Filament\Resources\Transactions\TransactionResource\Pages;
 use App\Filament\Resources\Transactions\TransactionResource\RelationManagers;
 use App\Models\Transactions\Transaction;
@@ -12,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Leandrocfe\FilamentPtbrFormFields\Money;
 
 class TransactionResource extends Resource
 {
@@ -33,12 +35,14 @@ class TransactionResource extends Resource
                             ->relationship('category', 'name')
                             ->native(false)
                             ->required(),
-                        Forms\Components\TextInput::make('transaction_type')
+                        Forms\Components\Select::make('transaction_type')
                             ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('amount')
+                            ->native(false)
+                            ->options(TransactionType::class),
+                        Money::make('amount')
                             ->required()
-                            ->numeric(),
+                            ->formatStateUsing(fn(?int $state) => number_format($state / 100, 2, ',', '.'))
+                            ->dehydrateStateUsing(fn(?string $state): ?int => str($state)->replace(['.', ','], '')->toInteger()),
                         Forms\Components\DatePicker::make('date')
                             ->required(),
                         Forms\Components\Toggle::make('finished')
