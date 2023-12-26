@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('wallet_id')->references('id')->on('wallets')->cascadeOnDelete();
+            $table->foreignUuid('account_id')->references('id')->on('accounts')->cascadeOnDelete();
             $table->string('name');
             $table->string('slug');
             $table->string('icon');
@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['wallet_id', 'slug']);
+            $table->unique(['account_id', 'slug']);
         });
     }
 

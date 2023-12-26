@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Wallet extends Model
+class Account extends Model
 {
     use HasFactory, HasUuids;
 
@@ -19,7 +19,7 @@ class Wallet extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)->using(UserWallet::class);
+        return $this->belongsToMany(User::class)->using(UserAccount::class);
     }
 
     public function categories(): HasMany

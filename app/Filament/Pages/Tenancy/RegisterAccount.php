@@ -2,17 +2,17 @@
 
 namespace App\Filament\Pages\Tenancy;
 
-use App\Models\Tenancy\Wallet;
+use App\Models\Tenancy\Account;
 use Filament\Pages\Page;
 use Filament\Pages\Tenancy\RegisterTenant;
 use Filament\Forms;
 use Filament\Forms\Form;
 
-class RegisterWallet extends RegisterTenant
+class RegisterAccount extends RegisterTenant
 {
-    protected static string $view = 'filament.pages.tenancy.register-wallet';
+    protected static string $view = 'filament.pages.tenancy.register-account';
 
-    protected static string $layout = 'filament.layouts.tenancy.register-wallet-layout';
+    protected static string $layout = 'filament.layouts.tenancy.register-account-layout';
 
     public static function getLabel(): string
     {
@@ -33,19 +33,19 @@ class RegisterWallet extends RegisterTenant
                     ->imageEditor()
                     ->imageEditorMode(2)
                     ->imageCropAspectRatio('1:1')
-                    ->directory('wallets'),
+                    ->directory('accounts'),
             ]);
     }
 
-    protected function handleRegistration(array $data): Wallet
+    protected function handleRegistration(array $data): Account
     {
         $data['slug'] = str($data['name'])->slug();
         
-        $wallet = Wallet::create($data);
+        $account = Account::create($data);
 
-        $wallet->users()->attach(auth()->user());
+        $account->users()->attach(auth()->user());
 
-        return $wallet;
+        return $account;
     }
 
     public function backAction(): \Filament\Actions\Action

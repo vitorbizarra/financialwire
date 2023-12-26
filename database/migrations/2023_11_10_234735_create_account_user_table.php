@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_wallet', function (Blueprint $table) {
+        Schema::create('account_user', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignUuid('wallet_id')->references('id')->on('wallets')->onDelete('cascade');
+            $table->foreignUuid('account_id')->references('id')->on('accounts')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_wallet');
+        Schema::dropIfExists('account_user');
     }
 };

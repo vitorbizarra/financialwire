@@ -12,8 +12,7 @@ class CreateCategory extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-
-        $data['wallet_id'] = filament()->getTenant()->id;
+        $data['account_id'] = filament()->getTenant()->id;
         $data['slug'] = str($data['name'])->slug();
         return $data;
     }

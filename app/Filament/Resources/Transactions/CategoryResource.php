@@ -26,8 +26,8 @@ class CategoryResource extends Resource
             ->schema([
                 Forms\Components\Section::make()
                     ->schema([
-                        Forms\Components\Select::make('wallet_id')
-                            ->relationship('wallet', 'name')
+                        Forms\Components\Select::make('account_id')
+                            ->relationship('account', 'name')
                             ->required()
                             ->native(false),
                         Forms\Components\TextInput::make('name')
@@ -58,7 +58,7 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('wallet.name')
+                Tables\Columns\TextColumn::make('account.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),

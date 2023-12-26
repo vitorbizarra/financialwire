@@ -3,7 +3,7 @@
 namespace App\Models\Transactions;
 
 use App\Enums\TransactionType;
-use App\Models\Tenancy\Wallet;
+use App\Models\Tenancy\Account;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +19,7 @@ class Transaction extends Model
         'date',
         'finished',
         'description',
-        'wallet_id',
+        'account_id',
         'category_id'
     ];
 
@@ -27,9 +27,9 @@ class Transaction extends Model
         'transaction_type' => TransactionType::class
     ];
 
-    public function wallet(): BelongsTo
+    public function account(): BelongsTo
     {
-        return $this->belongsTo(Wallet::class);
+        return $this->belongsTo(Account::class);
     }
 
     public function category(): BelongsTo

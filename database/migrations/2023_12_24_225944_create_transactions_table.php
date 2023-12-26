@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->date('date');
             $table->boolean('finished');
             $table->string('description');
-            $table->foreignUuid('wallet_id')->references('id')->on('wallets')->cascadeOnDelete();
+            $table->foreignUuid('account_id')->references('id')->on('accounts')->cascadeOnDelete();
             $table->foreignUuid('category_id')->references('id')->on('categories')->cascadeOnDelete();
             $table->timestamps();
         });

@@ -4,8 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Models\Tenancy\UserWallet;
-use App\Models\Tenancy\Wallet;
+use App\Models\Tenancy\UserAccount;
+use App\Models\Tenancy\Account;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasName;
@@ -57,9 +57,9 @@ class User extends Authenticatable implements FilamentUser, HasTenants, HasName,
         'password' => 'hashed',
     ];
 
-    public function wallets(): BelongsToMany
+    public function accounts(): BelongsToMany
     {
-        return $this->belongsToMany(Wallet::class)->using(UserWallet::class);
+        return $this->belongsToMany(Account::class)->using(UserAccount::class);
     }
 
     public function canAccessPanel(Panel $panel): bool
@@ -69,15 +69,15 @@ class User extends Authenticatable implements FilamentUser, HasTenants, HasName,
 
     public function canAccessTenant(Model $tenant): bool
     {
-        return $this->wallets->contains($tenant);
+        return $this->accounts->contains($tenant);
     }
 
     /**
-     * @return array<Wallet> | Collection
+     * @return array<Account> | Collection
      */
     public function getTenants(Panel $panel): array|Collection
     {
-        return $this->wallets;
+        return $this->accounts;
     }
 
     public function getFilamentName(): string

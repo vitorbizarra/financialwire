@@ -28,8 +28,8 @@ class TransactionResource extends Resource
             ->schema([
                 Forms\Components\Section::make('Transaction')
                     ->schema([
-                        Forms\Components\Select::make('wallet_id')
-                            ->relationship('wallet', 'name')
+                        Forms\Components\Select::make('account_id')
+                            ->relationship('account', 'name')
                             ->native(false)
                             ->required(),
                         Forms\Components\Select::make('category_id')
@@ -59,7 +59,7 @@ class TransactionResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('wallet.name')
+                Tables\Columns\TextColumn::make('account.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('category.name')
                     ->searchable(),

@@ -2,7 +2,7 @@
 
 namespace App\Models\Transactions;
 
-use App\Models\Tenancy\Wallet;
+use App\Models\Tenancy\Account;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,11 +14,11 @@ class Category extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
 
-    protected $fillable = ['wallet_id', 'name', 'slug', 'icon', 'color'];
+    protected $fillable = ['account_id', 'name', 'slug', 'icon', 'color'];
 
-    public function wallet(): BelongsTo
+    public function account(): BelongsTo
     {
-        return $this->belongsTo(Wallet::class);
+        return $this->belongsTo(Account::class);
     }
 
     public function transactions(): HasMany

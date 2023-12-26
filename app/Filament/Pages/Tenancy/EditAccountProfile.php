@@ -8,7 +8,7 @@ use Filament\Forms\Form;
 use Filament\Pages\Tenancy\EditTenantProfile;
 use Illuminate\Database\Eloquent\Model;
 
-class EditWalletProfile extends EditTenantProfile
+class EditAccountProfile extends EditTenantProfile
 {
     public static function getLabel(): string
     {
@@ -29,7 +29,7 @@ class EditWalletProfile extends EditTenantProfile
                     ->imageEditor()
                     ->imageEditorMode(2)
                     ->imageCropAspectRatio('1:1')
-                    ->directory('wallets'),
+                    ->directory('accounts'),
             ]);
     }
 }
