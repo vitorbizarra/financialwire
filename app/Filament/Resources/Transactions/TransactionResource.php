@@ -6,6 +6,7 @@ use App\Enums\TransactionType;
 use App\Filament\Resources\Transactions\TransactionResource\Pages;
 use App\Filament\Resources\Transactions\TransactionResource\RelationManagers;
 use App\Models\Transactions\Transaction;
+use App\Tables\Columns\MoneyColumn;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -72,12 +73,13 @@ class TransactionResource extends Resource
                     ->searchable()
                     ->badge()
                     ->icon(fn($record) => $record->category->icon)
-                    ->color(fn($record) => Color::hex($record->category->color)),
+                    ->color(fn($record) => Color::hex($record->category->color))
+                    ->alignCenter(),
                 Tables\Columns\TextColumn::make('transaction_type')
                     ->badge()
                     ->iconPosition(IconPosition::After)
                     ->alignCenter(),
-                Tables\Columns\TextColumn::make('amount')
+                MoneyColumn::make('amount')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('account.name')
