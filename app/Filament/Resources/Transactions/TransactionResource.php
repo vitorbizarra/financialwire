@@ -29,6 +29,7 @@ class TransactionResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make('Transaction')
+                    ->columns(2)
                     ->schema([
                         Forms\Components\Select::make('account_id')
                             ->relationship('account', 'name')
@@ -48,11 +49,23 @@ class TransactionResource extends Resource
                             ->dehydrateStateUsing(fn(?string $state): ?int => str($state)->replace(['.', ','], '')->toInteger()),
                         Forms\Components\DatePicker::make('date')
                             ->required(),
-                        Forms\Components\Toggle::make('finished')
-                            ->required(),
                         Forms\Components\TextInput::make('description')
                             ->required()
                             ->maxLength(255),
+                        Forms\Components\Toggle::make('finished')
+                            ->inline(false),
+
+                        Forms\Components\Fieldset::make('Additional Info')
+                            ->columnSpanFull()
+                            ->hidden(fn(?Transaction $record): bool => $record === null)
+                            ->columns(2)
+                            ->schema([
+                                Forms\Components\Placeholder::make('created_at')
+                                    ->content(fn($record) => $record->created_at->format('d/m/Y H:i')),
+
+                                Forms\Components\Placeholder::make('updated_at')
+                                    ->content(fn($record) => $record->updated_at->format('d/m/Y H:i')),
+                            ])
                     ]),
             ]);
     }
