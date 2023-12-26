@@ -15,7 +15,7 @@ class Account extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ['user_id', 'name', 'slug', 'cover'];
+    protected $fillable = ['user_id', 'name', 'slug'];
 
     public function users(): BelongsTo
     {
