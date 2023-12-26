@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Factories\Tenancy;
+namespace Database\Factories\Transactions;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tenancy\Account>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transactions\Account>
  */
 class AccountFactory extends Factory
 {

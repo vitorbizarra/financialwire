@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Tenancy;
+namespace App\Models\Transactions;
 
 use App\Models\Transactions\Category;
 use App\Models\Transactions\Transaction;

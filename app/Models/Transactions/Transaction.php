@@ -3,7 +3,6 @@
 namespace App\Models\Transactions;
 
 use App\Enums\TransactionType;
-use App\Models\Tenancy\Account;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
