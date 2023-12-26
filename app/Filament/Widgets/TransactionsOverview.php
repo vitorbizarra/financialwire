@@ -15,58 +15,58 @@ class TransactionsOverview extends BaseWidget
 
     protected function getStats(): array
     {
-        $startDate = $this->filters['startDate'] ?? null;
-        $endDate = $this->filters['endDate'] ?? null;
-        $finished = $this->filters['finished'] ?? null;
+        $startDate = $this->filters['startDate'] ?? now()->startOfMonth();
+        $endDate = $this->filters['endDate'] ?? now()->endOfMonth();
+        $preview = $this->filters['preview'] ?? null;
 
         return [
             Stat::make(
                 label: 'Incomes',
-                value: $this->formatCurrency($this->getIncomes($startDate, $endDate, $finished))
+                value: $this->formatCurrency($this->getIncomes($startDate, $endDate, $preview))
             )->icon('heroicon-m-arrow-trending-up'),
 
             Stat::make(
                 label: 'Expenses',
-                value: $this->formatCurrency($this->getExpenses($startDate, $endDate, $finished))
+                value: $this->formatCurrency($this->getExpenses($startDate, $endDate, $preview))
             )->icon('heroicon-m-arrow-trending-down'),
 
             Stat::make(
                 label: 'Current Balance',
-                value: $this->formatCurrency($this->getCurrentBalance($startDate, $endDate, $finished))
+                value: $this->formatCurrency($this->getCurrentBalance($startDate, $endDate, $preview))
             )->icon('heroicon-m-building-library'),
         ];
     }
 
-    private function getTransactions($startDate, $endDate, bool $finished, TransactionType $transactionType): Builder
+    private function getTransactions($startDate, $endDate, bool $preview, TransactionType $transactionType): Builder
     {
         $query = Transaction::where('user_id', auth()->user()->id)
             ->where('transaction_type', $transactionType)
             ->whereBetween('date', [$startDate, $endDate]);
 
-        if ($finished) {
-            $query->where('finished', $finished);
+        if (!$preview) {
+            $query->where('finished', true);
         }
 
         return $query;
     }
 
-    private function getIncomes($startDate, $endDate, bool $finished)
+    private function getIncomes($startDate, $endDate, bool $preview)
     {
-        return $this->getTransactions($startDate, $endDate, $finished, TransactionType::Income)
+        return $this->getTransactions($startDate, $endDate, $preview, TransactionType::Income)
             ->sum('amount');
     }
 
-    private function getExpenses($startDate, $endDate, bool $finished)
+    private function getExpenses($startDate, $endDate, bool $preview)
     {
-        return $this->getTransactions($startDate, $endDate, $finished, TransactionType::Expense)
+        return $this->getTransactions($startDate, $endDate, $preview, TransactionType::Expense)
             ->sum('amount');
     }
 
 
 
-    private function getCurrentBalance($startDate, $endDate, bool $finished)
+    private function getCurrentBalance($startDate, $endDate, bool $preview)
     {
-        return $this->getIncomes($startDate, $endDate, $finished) - $this->getExpenses($startDate, $endDate, $finished);
+        return $this->getIncomes($startDate, $endDate, $preview) - $this->getExpenses($startDate, $endDate, $preview);
     }
 
     private function formatCurrency(int $currency): string
