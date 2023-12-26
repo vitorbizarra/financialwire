@@ -8,6 +8,7 @@ use App\Models\Transactions\Category;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Guava\FilamentIconPicker\Forms\IconPicker;
@@ -57,19 +58,19 @@ class CategoryResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('name')
             ->columns([
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->sortable()
+                    ->badge()
+                    ->icon(fn($record) => $record->icon)
+                    ->color(fn($record) => Color::hex($record->color)),
                 Tables\Columns\TextColumn::make('account.name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('icon'),
-                Tables\Columns\ColorColumn::make('color')
-                    ->searchable()
-                    ->alignCenter(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
@@ -104,9 +105,9 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCategories::route('/'),
+            'index'  => Pages\ListCategories::route('/'),
             'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'edit'   => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
 
