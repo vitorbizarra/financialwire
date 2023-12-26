@@ -4,13 +4,14 @@ namespace App\Models\Transactions;
 
 use App\Enums\TransactionType;
 use App\Models\Tenancy\Wallet;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     protected $fillable = [
         'transaction_type',
