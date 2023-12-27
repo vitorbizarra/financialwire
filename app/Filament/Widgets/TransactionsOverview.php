@@ -62,8 +62,6 @@ class TransactionsOverview extends BaseWidget
             ->sum('amount');
     }
 
-
-
     private function getCurrentBalance($startDate, $endDate, bool $preview)
     {
         return $this->getIncomes($startDate, $endDate, $preview) - $this->getExpenses($startDate, $endDate, $preview);
