@@ -66,6 +66,6 @@ class AccountResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return static::getModel()::where('user_id', auth()->user()->id)->count();
     }
 }
