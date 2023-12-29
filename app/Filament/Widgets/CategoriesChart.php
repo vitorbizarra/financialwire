@@ -4,18 +4,17 @@ namespace App\Filament\Widgets;
 
 use App\Enums\TransactionType;
 use App\Models\Transactions\Category;
-use App\Models\Transactions\Transaction;
+use Filament\Support\RawJs;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
-use Illuminate\Database\Eloquent\Builder;
 
 class CategoriesChart extends ChartWidget
 {
     use InteractsWithPageFilters;
 
-    protected static ?string $heading = 'Chart';
+    protected static ?string $heading = 'Revenue by Category';
 
-    protected int | string | array $columnSpan = 1;
+    protected int|string|array $columnSpan = 1;
 
     protected function getData(): array
     {
@@ -40,7 +39,6 @@ class CategoriesChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label'           => 'Revenue by category',
                     'data'            => $data,
                     'backgroundColor' => $backgroundColor,
                 ],
@@ -49,9 +47,30 @@ class CategoriesChart extends ChartWidget
         ];
     }
 
-    protected function getType(): string
+    protected function getOptions(): RawJs
     {
-        return 'pie';
+        return RawJs::make(<<<JS
+            {
+                scales: {
+                    y: {display: false},
+                    x: {display: false},
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem, chart){
+                                var datasetLabel = tooltipItem.label || '';
+
+                                return datasetLabel + ': ' + Intl.NumberFormat('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                }).format(tooltipItem.raw);
+                            }
+                        }
+                    }
+                }
+            }
+        JS);
     }
 
     private function getCategoryAmount(Category $category, string $startDate, string $endDate, bool $preview, TransactionType $transactionType): int
@@ -66,5 +85,11 @@ class CategoriesChart extends ChartWidget
         }
 
         return $query->sum('amount');
+    }
+
+    
+    protected function getType(): string
+    {
+        return 'pie';
     }
 }
