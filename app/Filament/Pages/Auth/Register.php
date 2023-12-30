@@ -27,9 +27,10 @@ class Register extends BasePage
                     ->required()
                     ->confirmed()
                     ->columnSpanFull()
-                    ->copyable()
                     ->regeneratePassword()
-                    ->generatePasswordUsing(fn() => str()->password(length: 12)),
+                    ->regeneratePasswordIcon('heroicon-m-arrow-path')
+                    ->regeneratePasswordIconColor('gray')
+                    ->generatePasswordUsing(fn () => str()->password(length: 12)),
                 Components\TextInput::make('password_confirmation')
                     ->required()
                     ->password()
