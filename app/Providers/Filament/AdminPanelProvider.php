@@ -40,7 +40,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->widgets([
                 Widgets\TransactionsOverview::class,
-                Widgets\CategoriesChart::class
+                Widgets\CategoriesChart::class,
+                Widgets\MonthRevenue::class,
             ])
             ->middleware([
                 EncryptCookies::class,

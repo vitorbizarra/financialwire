@@ -14,8 +14,6 @@ class CategoriesChart extends ChartWidget
 
     protected static ?string $heading = 'Revenue by Category';
 
-    protected int|string|array $columnSpan = 1;
-
     protected function getData(): array
     {
         $startDate = $this->filters['startDate'] ?? now()->startOfMonth();
