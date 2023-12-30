@@ -18,7 +18,7 @@ class CategoriesChart extends ChartWidget
     {
         $startDate = $this->filters['startDate'] ?? now()->startOfMonth();
         $endDate = $this->filters['endDate'] ?? now()->endOfMonth();
-        $preview = $this->filters['preview'] ?? null;
+        $preview = $this->filters['preview'] ?? false;
 
         $data = [];
         $backgroundColor = [];

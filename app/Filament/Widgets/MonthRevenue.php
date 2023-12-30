@@ -24,7 +24,7 @@ class MonthRevenue extends ChartWidget
 
         $startDate = $this->filters['startDate'] ?? now()->startOfMonth();
         $endDate = $this->filters['endDate'] ?? now()->endOfMonth();
-        $preview = $this->filters['preview'] ?? null;
+        $preview = $this->filters['preview'] ?? false;
 
         $income = $this->getPeriodAmount($startDate, $endDate, $preview, TransactionType::Income);
         $expense = $this->getPeriodAmount($startDate, $endDate, $preview, TransactionType::Expense);
