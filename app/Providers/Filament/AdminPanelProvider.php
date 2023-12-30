@@ -29,7 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->registration(Pages\Auth\Register::class)
             ->profile(Pages\Auth\EditProfile::class)
-            ->topNavigation()
+            ->sidebarCollapsibleOnDesktop()
             ->colors([
                 'primary' => Color::Purple,
             ])
