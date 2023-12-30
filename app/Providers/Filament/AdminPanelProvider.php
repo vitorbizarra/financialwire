@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->registration(Pages\Auth\Register::class)
+            ->passwordReset()
             ->profile(Pages\Auth\EditProfile::class)
             ->sidebarCollapsibleOnDesktop()
             ->colors([
