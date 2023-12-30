@@ -16,14 +16,17 @@ class Register extends BasePage
             ->columns(2)
             ->schema([
                 Components\TextInput::make('first_name')
+                    ->label(__('First name'))
                     ->required(),
                 Components\TextInput::make('last_name')
+                    ->label(__('Last name'))
                     ->required(),
                 Components\TextInput::make('email')
                     ->required()
                     ->email()
                     ->columnSpanFull(),
                 Password::make('password')
+                    ->label(__('Password'))
                     ->required()
                     ->confirmed()
                     ->columnSpanFull()
@@ -32,6 +35,7 @@ class Register extends BasePage
                     ->regeneratePasswordIconColor('gray')
                     ->generatePasswordUsing(fn () => str()->password(length: 12)),
                 Components\TextInput::make('password_confirmation')
+                    ->label(__('Password confirmation'))
                     ->required()
                     ->password()
                     ->columnSpanFull(),
