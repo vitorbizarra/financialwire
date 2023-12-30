@@ -85,7 +85,6 @@ class CategoriesChart extends ChartWidget
         return $query->sum('amount');
     }
 
-    
     protected function getType(): string
     {
         return 'pie';

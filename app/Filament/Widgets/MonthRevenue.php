@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Enums\TransactionType;
 use App\Models\Transactions\Transaction;
+use Filament\Support\Colors\Color;
 use Filament\Support\RawJs;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
@@ -16,6 +17,8 @@ class MonthRevenue extends ChartWidget
 
     protected static ?string $heading = 'Revenue By Month';
 
+    protected int|string|array $columnSpan = 2;
+
     protected function getData(): array
     {
 
@@ -26,18 +29,25 @@ class MonthRevenue extends ChartWidget
         $income = $this->getPeriodAmount($startDate, $endDate, $preview, TransactionType::Income);
         $expense = $this->getPeriodAmount($startDate, $endDate, $preview, TransactionType::Expense);
 
-        $expense->each(fn($period) => $period->aggregate = -$period->aggregate);
+        $expense->each(fn ($period) => $period->aggregate = -$period->aggregate);
 
-        $data = $income->concat($expense)->groupBy('new_date')->map(fn($items) => ['date' => $items->first()->new_date, 'aggregate' => $items->sum('aggregate') / 100]);
+        $data = $income->concat($expense)->groupBy('new_date')->map(fn ($items) => [
+            'date'      => $items->first()->new_date,
+            'aggregate' => $items->sum('aggregate') / 100,
+            'color'     => $this->filamentColorToHex($items->sum('aggregate') < 0 ? Color::Red : Color::Lime)
+        ]);
+
+        Color::Red;
 
         $final = [
             'datasets' => [
                 [
-                    'label' => 'Blog posts',
-                    'data'  => $data->map(fn($period)  => $period['aggregate'])->values()->toArray(),
+                    'label'           => 'Balance',
+                    'data'            => $data->map(fn ($period)            => $period['aggregate'])->values()->toArray(),
+                    'backgroundColor' => $data->map(fn ($period) => $period['color'])->values()->toArray(),
                 ],
             ],
-            'labels'   => $data->map(fn($period)   => Carbon::parse($period['date'])->format('m/Y'))->values()->toArray(),
+            'labels'   => $data->map(fn ($period)   => Carbon::parse($period['date'])->format('m/Y'))->values()->toArray(),
         ];
 
         return $final;
@@ -62,13 +72,30 @@ class MonthRevenue extends ChartWidget
         return $query->groupBy('year', 'month')->get();
     }
 
+    private function filamentColorToHex(mixed $color)
+    {
+        $rgb = str($color['400'])->explode(',')->toArray();
+        return sprintf("#%02x%02x%02x", $rgb[0], $rgb[1], $rgb[2]);
+    }
+
     protected function getOptions(): RawJs
     {
         return RawJs::make(<<<JS
             {
-                scales: {
-                    y: {display: false},
-                    x: {display: false},
+                'scales': {
+                    y: {
+                        ticks: {
+                            callback: function(tooltipItem, chart){
+
+                                // console.log(tooltipItem)
+
+                                return Intl.NumberFormat('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                }).format(tooltipItem);
+                            }
+                        }
+                    },
                 },
                 plugins: {
                     tooltip: {
@@ -82,15 +109,17 @@ class MonthRevenue extends ChartWidget
                                 }).format(tooltipItem.raw);
                             }
                         }
-                    }
+                    },
+                    legend: { 
+                        display: false, 
+                    }, 
                 }
             }
         JS);
     }
 
-
     protected function getType(): string
     {
-        return 'pie';
+        return 'bar';
     }
 }
