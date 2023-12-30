@@ -24,8 +24,8 @@ class Dashboard extends BaseDashboard
                     ->schema([
                         Forms\Components\DatePicker::make('startDate'),
                         Forms\Components\DatePicker::make('endDate'),
-                        Forms\Components\Toggle::make('preview')
-                            ->inline(false),
+                        Forms\Components\Select::make('preview')
+                            ->boolean(),
                     ])
                     ->headerActions($this->getFiltersFormHeaderActions()),
             ]);
