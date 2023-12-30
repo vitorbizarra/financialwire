@@ -2,9 +2,12 @@
 
 namespace App\Filament\Pages\Auth;
 
+use Filament\Facades\Filament;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Pages\Auth\EditProfile as BasePáge;
+use Filament\Support\Enums\VerticalAlignment;
 use Illuminate\Validation\Rules\Password as RulesPassword;
 use Rawilk\FilamentPasswordInput\Password;
 
@@ -39,6 +42,7 @@ class EditProfile extends BasePáge
                         $this->getEmailFormComponent()
                             ->columnSpanFull(),
                     ]),
+
                 Components\Section::make('Security')
                     ->description('Your security data')
                     ->icon('heroicon-o-lock-closed')
@@ -51,9 +55,33 @@ class EditProfile extends BasePáge
                             ->regeneratePassword()
                             ->regeneratePasswordIcon('heroicon-m-arrow-path')
                             ->regeneratePasswordIconColor('gray')
-                            ->generatePasswordUsing(fn() => str()->password(length: 12)),
+                            ->generatePasswordUsing(fn () => str()->password(length: 12)),
                         $this->getPasswordConfirmationFormComponent()
-                    ])
+                    ]),
+
+                Components\Section::make('Danger zone')
+                    ->description('Delete account')
+                    ->icon('heroicon-o-exclamation-circle')
+                    ->aside()
+                    ->schema([
+                        Components\TextInput::make('deleteAccountConfirmation')
+                            ->label('Type your email to unlock the button:')
+                            ->live()
+                            ->placeholder(auth()->user()->email),
+                        Components\Actions::make([
+                            Components\Actions\Action::make('deleteAccount')
+                                ->icon('heroicon-m-trash')
+                                ->color('danger')
+                                ->disabled(fn (Get $get) => $get('deleteAccountConfirmation') != auth()->user()->email)
+                                ->action(function () {
+                                    $user = auth()->user();
+                                    auth()->logout();
+                                    if ($user->delete()) {
+                                        return redirect(Filament::getLoginUrl());
+                                    }
+                                })
+                        ])->alignEnd()->verticalAlignment(VerticalAlignment::End)
+                    ]),
             ]);
     }
 
