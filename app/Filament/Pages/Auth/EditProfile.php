@@ -26,50 +26,57 @@ class EditProfile extends BasePáge
     {
         return $form
             ->schema([
-                Components\Section::make('Personal Informations')
-                    ->description('Your user data')
+                Components\Section::make(__('Personal Informations'))
+                    ->description(__('Your user data'))
                     ->icon('heroicon-o-user-circle')
                     ->aside()
                     ->columns(2)
                     ->schema([
                         Components\TextInput::make('first_name')
+                            ->label(__('First name'))
                             ->required()
                             ->maxLength(255)
                             ->autofocus(),
                         Components\TextInput::make('last_name')
+                            ->label(__('Last name'))
                             ->required()
                             ->maxLength(255),
                         $this->getEmailFormComponent()
                             ->columnSpanFull(),
                     ]),
 
-                Components\Section::make('Security')
-                    ->description('Your security data')
+                Components\Section::make(__('Security'))
+                    ->description(__('Your security data'))
                     ->icon('heroicon-o-lock-closed')
                     ->aside()
                     ->schema([
                         Password::make('password')
+                            ->label(__('Password'))
                             ->required()
                             ->confirmed()
                             ->columnSpanFull()
+                            ->showPasswordText(__('Show password'))
+                            ->hidePasswordText(__('Hide password'))
                             ->regeneratePassword()
                             ->regeneratePasswordIcon('heroicon-m-arrow-path')
                             ->regeneratePasswordIconColor('gray')
+                            ->regeneratePasswordTooltip(__('Generate new password'))
                             ->generatePasswordUsing(fn () => str()->password(length: 12)),
                         $this->getPasswordConfirmationFormComponent()
                     ]),
 
-                Components\Section::make('Danger zone')
-                    ->description('Delete account')
+                Components\Section::make(__('Danger Zone'))
+                    ->description(__('Delete Account'))
                     ->icon('heroicon-o-exclamation-circle')
                     ->aside()
                     ->schema([
                         Components\TextInput::make('deleteAccountConfirmation')
-                            ->label('Type your email to unlock the button:')
+                            ->label(__('Enter your email to be able to delete your account'))
                             ->live()
                             ->placeholder(auth()->user()->email),
                         Components\Actions::make([
                             Components\Actions\Action::make('deleteAccount')
+                                ->label(__('Delete Account'))
                                 ->icon('heroicon-m-trash')
                                 ->color('danger')
                                 ->disabled(fn (Get $get) => $get('deleteAccountConfirmation') != auth()->user()->email)
@@ -92,11 +99,11 @@ class EditProfile extends BasePáge
 
     public function getTitle(): string
     {
-        return "My Profile";
+        return __('Profile');
     }
 
     public function getSubtitle(): string
     {
-        return "Manage your account information";
+        return __('Manage Account');
     }
 }
