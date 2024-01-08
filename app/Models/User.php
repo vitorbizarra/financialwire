@@ -4,11 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Models\Transactions\Account;
-use App\Models\Transactions\Category;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Models\Contracts\HasAvatar;
-use Filament\Models\Contracts\HasName;
+use App\Models\Transactions\{Account, Category, Transaction};
+use Filament\Models\Contracts\{FilamentUser, HasAvatar, HasName};
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -54,7 +51,7 @@ class User extends Authenticatable implements FilamentUser, HasName, HasAvatar
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password'          => 'hashed',
+        'password' => 'hashed',
     ];
 
     public function accounts(): HasMany
@@ -65,6 +62,11 @@ class User extends Authenticatable implements FilamentUser, HasName, HasAvatar
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class);
+    }
+
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
     }
 
     public function canAccessPanel(Panel $panel): bool
