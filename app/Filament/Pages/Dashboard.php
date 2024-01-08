@@ -30,7 +30,8 @@ class Dashboard extends BaseDashboard
                         Forms\Components\DatePicker::make('startDate'),
                         Forms\Components\DatePicker::make('endDate'),
                         Forms\Components\Select::make('preview')
-                            ->boolean(),
+                            ->boolean()
+                            ->native(false),
                     ])
                     ->headerActions($this->getFiltersFormHeaderActions()),
             ]);
