@@ -21,35 +21,48 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-m-bookmark';
 
+    protected static ?string $modelLabel = 'categoria';
+
+    protected static ?string $recordTitleAttribute = 'name';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Section::make()
+                    ->columns(3)
                     ->schema([
                         Forms\Components\Select::make('account_id')
+                            ->label('Conta')
                             ->relationship('account', 'name')
                             ->required()
                             ->native(false),
                         Forms\Components\TextInput::make('name')
+                            ->label('Nome')
                             ->required()
                             ->maxLength(255),
-                        IconPicker::make('icon')
-                            ->required()
-                            ->columns(3),
                         Forms\Components\ColorPicker::make('color')
+                            ->label('Cor')
                             ->required(),
+                        IconPicker::make('icon')
+                            ->label('Ícone')
+                            ->required()
+                            ->columns(3)
+                            ->columnSpanFull(),
 
-                        Forms\Components\Fieldset::make()
+                        Forms\Components\Fieldset::make('Informações Adicionais')
                             ->columns(3)
                             ->hidden(fn(?Category $record): bool => $record === null)
                             ->schema([
                                 Forms\Components\Placeholder::make('created_at')
-                                    ->content(fn(Category $record): string => $record->created_at ?? '--'),
+                                    ->label('Criado em')
+                                    ->content(fn(Category $record): string => $record->created_at?->format('d/m/Y H:i') ?? 'Nunca'),
                                 Forms\Components\Placeholder::make('updated_at')
-                                    ->content(fn(Category $record): string => $record->updated_at ?? '--'),
+                                    ->label('Atualizado em')
+                                    ->content(fn(Category $record): string => $record->updated_at?->format('d/m/Y H:i') ?? 'Nunca'),
                                 Forms\Components\Placeholder::make('deleted_at')
-                                    ->content(fn(Category $record): string => $record->deleted_at ?? '--'),
+                                    ->label('Excluído em')
+                                    ->content(fn(Category $record): string => $record->deleted_at?->format('d/m/Y H:i') ?? 'Nunca'),
                             ])
                     ])
             ]);
@@ -61,22 +74,27 @@ class CategoryResource extends Resource
             ->defaultSort('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nome')
                     ->searchable()
                     ->sortable()
                     ->badge()
                     ->icon(fn($record) => $record->icon)
                     ->color(fn($record) => Color::hex($record->color)),
                 Tables\Columns\TextColumn::make('account.name')
+                    ->label('Conta')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
+                    ->label('Excluído em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -105,9 +123,9 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListCategories::route('/'),
+            'index' => Pages\ListCategories::route('/'),
             'create' => Pages\CreateCategory::route('/create'),
-            'edit'   => Pages\EditCategory::route('/{record}/edit'),
+            'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
 

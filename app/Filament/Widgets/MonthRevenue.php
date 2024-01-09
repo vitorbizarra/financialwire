@@ -15,7 +15,7 @@ class MonthRevenue extends ChartWidget
 {
     use InteractsWithPageFilters;
 
-    protected static ?string $heading = 'Revenue By Month';
+    protected static ?string $heading = 'Receita por mês';
 
     protected int|string|array $columnSpan = 2;
 

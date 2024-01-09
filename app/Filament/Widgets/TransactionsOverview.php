@@ -21,17 +21,17 @@ class TransactionsOverview extends BaseWidget
 
         return [
             Stat::make(
-                label: 'Incomes',
+                label: 'Receitas',
                 value: $this->formatCurrency($this->getIncomes($startDate, $endDate, $preview))
             )->icon('heroicon-m-arrow-trending-up'),
 
             Stat::make(
-                label: 'Expenses',
+                label: 'Despesas',
                 value: $this->formatCurrency($this->getExpenses($startDate, $endDate, $preview))
             )->icon('heroicon-m-arrow-trending-down'),
 
             Stat::make(
-                label: 'Current Balance',
+                label: 'Saldo',
                 value: $this->formatCurrency($this->getCurrentBalance($startDate, $endDate, $preview))
             )->icon('heroicon-m-building-library'),
         ];

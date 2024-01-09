@@ -20,18 +20,23 @@ class Dashboard extends BaseDashboard
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Filters')
+                Forms\Components\Section::make('Filtros')
                     ->columns(3)
                     ->collapsible()
                     ->collapsed()
                     ->icon('heroicon-m-adjustments-horizontal')
                     ->iconSize(IconSize::Medium)
                     ->schema([
-                        Forms\Components\DatePicker::make('startDate'),
-                        Forms\Components\DatePicker::make('endDate'),
+                        Forms\Components\DatePicker::make('startDate')
+                            ->label('Data inicial'),
+                        Forms\Components\DatePicker::make('endDate')
+                            ->label('Data final'),
                         Forms\Components\Select::make('preview')
+                            ->label('Projetar')
                             ->boolean()
-                            ->native(false),
+                            ->native(false)
+                            ->hintIcon('heroicon-m-question-mark-circle')
+                            ->hintIconTooltip('Ao ativar essa opção, considera todas as transações, finalizadas ou não.'),
                     ])
                     ->headerActions($this->getFiltersFormHeaderActions()),
             ]);
@@ -41,17 +46,17 @@ class Dashboard extends BaseDashboard
     {
         return [
             Forms\Components\Actions\Action::make('clearFilters')
-                ->label('Clear Filters')
+                ->label('Limpar filtros')
                 ->icon('heroicon-m-x-circle')
                 ->size(ActionSize::ExtraSmall)
-                ->hidden(fn (Forms\Get $get) => ($get('startDate') == null) && ($get('endDate') == null) && ($get('preview') == null))
+                ->hidden(fn(Forms\Get $get) => ($get('startDate') == null) && ($get('endDate') == null) && ($get('preview') == null))
                 ->action(function (Forms\Set $set) {
                     $set('startDate', null);
                     $set('endDate', null);
                     $set('preview', false);
 
                     Notification::make()
-                        ->title('Filters cleared!')
+                        ->title('Filtros limpados com sucesso!')
                         ->success()
                         ->send();
                 })

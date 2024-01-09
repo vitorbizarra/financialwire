@@ -19,14 +19,31 @@ class AccountResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-m-wallet';
 
+    protected static ?string $modelLabel = 'conta';
+
+    protected static ?string $recordTitleAttribute = 'name';
+
     public static function form(Form $form): Form
     {
         return $form
             ->columns(1)
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nome')
                     ->required()
                     ->maxLength(255),
+
+                Forms\Components\Fieldset::make('Informações Adicionais')
+                    ->hidden(fn(?Account $record): bool => is_null($record))
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\Placeholder::make('created_at')
+                            ->label('Criado em:')
+                            ->content(fn(Account $record): string => $record->created_at->format('d/m/Y H:i')),
+                        Forms\Components\Placeholder::make('updated_at')
+                            ->label('Atualizado em:')
+                            ->content(fn(Account $record): string => $record->updated_at->format('d/m/Y H:i')),
+                    ])
             ]);
     }
 
@@ -35,11 +52,14 @@ class AccountResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nome')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Criado em')
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Atualizado em')
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
             ])

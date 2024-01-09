@@ -12,7 +12,7 @@ class CategoriesChart extends ChartWidget
 {
     use InteractsWithPageFilters;
 
-    protected static ?string $heading = 'Revenue by Category';
+    protected static ?string $heading = 'Receita por Categoria';
 
     protected function getData(): array
     {
