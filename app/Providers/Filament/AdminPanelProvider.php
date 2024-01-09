@@ -45,6 +45,7 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\TransactionsOverview::class,
                 Widgets\MonthRevenue::class,
                 Widgets\CategoriesChart::class,
+                Widgets\TodayTransactions::class
             ])
             ->middleware([
                 EncryptCookies::class,
