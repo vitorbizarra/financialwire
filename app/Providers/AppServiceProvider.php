@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +12,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        Password::defaults(
+            fn() => Password::min(8)
+                ->letters()
+                ->numbers()
+                ->symbols()
+                ->mixedCase()
+        );
     }
 
     /**
