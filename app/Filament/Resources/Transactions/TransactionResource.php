@@ -74,6 +74,7 @@ class TransactionResource extends Resource
     {
         return $table
             ->defaultSort('date', 'desc')
+            ->defaultGroup('date')
             ->columns([
                 Tables\Columns\ToggleColumn::make('finished')
                     ->alignCenter(),
@@ -109,8 +110,10 @@ class TransactionResource extends Resource
             ->filters([
                 Tables\Filters\Filter::make('date')
                     ->form([
-                        Forms\Components\DatePicker::make('startDate'),
-                        Forms\Components\DatePicker::make('endDate'),
+                        Forms\Components\DatePicker::make('startDate')
+                            ->default(now()->startOfMonth()),
+                        Forms\Components\DatePicker::make('endDate')
+                            ->default(now()->endOfMonth()),
                     ])
                     ->query(fn(Builder $query, array $data): Builder => $query->whereBetween('date', [$data['startDate'] ?? now()->startOfMonth(), $data['endDate'] ?? now()->endOfMonth()])),
 
@@ -120,7 +123,14 @@ class TransactionResource extends Resource
                     ->preload(),
 
                 Tables\Filters\Filter::make('finished')
+                    ->toggle()
                     ->query(fn(Builder $query) => $query->where('finished', true))
+            ])
+            ->groups([
+                Tables\Grouping\Group::make('date')
+                    ->date(),
+                'category.name',
+                'transaction_type'
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -143,10 +153,10 @@ class TransactionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListTransactions::route('/'),
+            'index' => Pages\ListTransactions::route('/'),
             'create' => Pages\CreateTransaction::route('/create'),
-            'view'   => Pages\ViewTransaction::route('/{record}'),
-            'edit'   => Pages\EditTransaction::route('/{record}/edit'),
+            'view' => Pages\ViewTransaction::route('/{record}'),
+            'edit' => Pages\EditTransaction::route('/{record}/edit'),
         ];
     }
 
