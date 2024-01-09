@@ -52,7 +52,6 @@ class EditProfile extends BasePáge
                     ->schema([
                         Password::make('password')
                             ->label(__('Password'))
-                            ->required()
                             ->confirmed()
                             ->columnSpanFull()
                             ->showPasswordText(__('Show password'))
