@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Widgets;
+namespace App\Filament\Widgets\App;
 
 use App\Filament\Resources\Transactions\TransactionResource;
 use App\Models\Transactions\Transaction;

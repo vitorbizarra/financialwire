@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Widgets;
+namespace App\Filament\Widgets\App;
 
 use App\Enums\TransactionType;
 use App\Models\Transactions\Category;

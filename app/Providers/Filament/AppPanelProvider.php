@@ -7,6 +7,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use App\Filament\Pages;
+use App\Filament\Resources;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -19,27 +20,35 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AdminPanelProvider extends PanelProvider
+class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('app')
+            ->path('app')
             ->login()
+            ->registration(Pages\Auth\Register::class)
             ->passwordReset()
             ->profile(Pages\Auth\EditProfile::class)
-            ->sidebarCollapsibleOnDesktop()
+            ->topNavigation()
             ->defaultAvatarProvider(BoringAvatarsProvider::class)
             ->colors([
                 'primary' => Color::Purple,
             ])
+            ->resources([
+                Resources\Transactions\AccountResource::class,
+                Resources\Transactions\CategoryResource::class,
+                Resources\Transactions\TransactionResource::class,
+            ])
             ->pages([
-                Pages\Admin\Dashboard::class,
+                Pages\App\Dashboard::class,
             ])
             ->widgets([
-                Widgets\AccountWidget::class,
+                Widgets\App\TransactionsOverview::class,
+                Widgets\App\MonthRevenue::class,
+                Widgets\App\CategoriesChart::class,
+                Widgets\App\TodayTransactions::class
             ])
             ->middleware([
                 EncryptCookies::class,
