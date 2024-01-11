@@ -71,6 +71,7 @@ class CategoryResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => $query->where('user_id', auth()->user()->id))
             ->defaultSort('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name')
