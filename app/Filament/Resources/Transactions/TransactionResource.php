@@ -136,8 +136,6 @@ class TransactionResource extends Resource
                 Tables\Grouping\Group::make('category_id')
                     ->label('Categoria')
                     ->getTitleFromRecordUsing(fn(?Transaction $record): ?string => Category::find($record->category_id)->name),
-                Tables\Grouping\Group::make('transaction_type')
-                    ->label('Tipo')
             ])
             ->contentGrid([
                 'md' => 2,
