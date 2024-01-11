@@ -86,51 +86,26 @@ class TransactionResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $livewire = $table->getLivewire();
+
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->where('user_id', auth()->user()->id))
             ->defaultSort('date', 'desc')
             ->defaultGroup('date')
-            ->columns([
-                Tables\Columns\ToggleColumn::make('finished')
-                    ->label('Finalizada')
-                    ->alignCenter(),
-                Tables\Columns\TextColumn::make('date')
-                    ->label('Data')
-                    ->date('d/m/Y')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('description')
-                    ->label('Descrição')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('category.name')
-                    ->label('Categoria')
-                    ->searchable()
-                    ->badge()
-                    ->icon(fn($record) => $record->category->icon)
-                    ->color(fn($record) => Color::hex($record->category->color))
-                    ->alignCenter(),
-                Tables\Columns\TextColumn::make('transaction_type')
-                    ->label('Tipo')
-                    ->badge()
-                    ->iconPosition(IconPosition::After)
-                    ->alignCenter(),
-                MoneyColumn::make('amount')
-                    ->label('Total')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('account.name')
-                    ->label('Conta')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Criado em')
-                    ->dateTime('d/m/Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Atualizado em')
-                    ->dateTime('d/m/Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ->columns(
+                $livewire->isGridLayout()
+                ? static::getGridTableColumns()
+                : static::getTableColumns()
+            )
+            ->contentGrid(
+                fn() => $livewire->isTableLayout()
+                ? null
+                : [
+                    'md' => 2,
+                    'lg' => 3,
+                    'xl' => 4,
+                ]
+            )
             ->filters([
                 Tables\Filters\Filter::make('date')
                     ->form([
@@ -164,6 +139,16 @@ class TransactionResource extends Resource
                 Tables\Grouping\Group::make('transaction_type')
                     ->label('Tipo')
             ])
+            ->contentGrid([
+                'md' => 2,
+                'xl' => 3,
+            ])
+            ->paginated([
+                9,
+                18,
+                36,
+                'all',
+            ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
@@ -173,6 +158,96 @@ class TransactionResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getGridTableColumns(): array
+    {
+        return [
+            Tables\Columns\Layout\Stack::make([
+                Tables\Columns\Layout\Grid::make([
+                    'lg' => 2
+                ])
+                    ->schema([
+                        Tables\Columns\TextColumn::make('date')
+                            ->label('Data')
+                            ->date('d/m/Y')
+                            ->sortable()
+                            ->badge(),
+                        Tables\Columns\TextColumn::make('transaction_type')
+                            ->label('Tipo')
+                            ->badge()
+                            ->iconPosition(IconPosition::After)
+                            ->alignEnd(),
+
+                        Tables\Columns\TextColumn::make('description')
+                            ->label('Descrição')
+                            ->searchable()
+                            ->size(Tables\Columns\TextColumn\TextColumnSize::Large),
+                        Tables\Columns\TextColumn::make('category.name')
+                            ->label('Categoria')
+                            ->searchable()
+                            ->badge()
+                            ->icon(fn($record) => $record->category->icon)
+                            ->color(fn($record) => Color::hex($record->category->color))
+                            ->alignEnd(),
+
+                        MoneyColumn::make('amount')
+                            ->label('Total')
+                            ->numeric()
+                            ->sortable()
+                            ->size(Tables\Columns\TextColumn\TextColumnSize::Medium),
+                        Tables\Columns\TextColumn::make('account.name')
+                            ->label('Conta')
+                            ->searchable()
+                            ->alignEnd()
+                            ->size(Tables\Columns\TextColumn\TextColumnSize::Medium),
+                    ]),
+            ]),
+        ];
+    }
+
+    public static function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\ToggleColumn::make('finished')
+                ->label('Finalizada')
+                ->alignCenter(),
+            Tables\Columns\TextColumn::make('date')
+                ->label('Data')
+                ->date('d/m/Y')
+                ->sortable(),
+            Tables\Columns\TextColumn::make('description')
+                ->label('Descrição')
+                ->searchable(),
+            MoneyColumn::make('amount')
+                ->label('Total')
+                ->numeric()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('category.name')
+                ->label('Categoria')
+                ->searchable()
+                ->badge()
+                ->icon(fn($record) => $record->category->icon)
+                ->color(fn($record) => Color::hex($record->category->color)),
+            Tables\Columns\TextColumn::make('transaction_type')
+                ->label('Tipo')
+                ->badge()
+                ->iconPosition(IconPosition::After)
+                ->alignCenter(),
+            Tables\Columns\TextColumn::make('account.name')
+                ->label('Conta')
+                ->searchable(),
+            Tables\Columns\TextColumn::make('created_at')
+                ->label('Criado em')
+                ->dateTime('d/m/Y H:i')
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+            Tables\Columns\TextColumn::make('updated_at')
+                ->label('Atualizado em')
+                ->dateTime('d/m/Y H:i')
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true)
+        ];
     }
 
     public static function getRelations(): array
