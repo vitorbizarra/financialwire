@@ -19,6 +19,7 @@
         "laravel/tinker": "^2.8",
         "leandrocfe/filament-ptbr-form-fields": "^3.0",
         "livewire/livewire": "^3.1",
+        "pxlrbt/filament-excel": "^2.3",
         "rawilk/filament-password-input": "^1.1",
         "tallstackui/tallstackui": "^1.9"
     },
