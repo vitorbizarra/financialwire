@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Transactions;
 use App\Enums\TransactionType;
 use App\Filament\Resources\Transactions\TransactionResource\Pages;
 use App\Filament\Resources\Transactions\TransactionResource\RelationManagers;
+use App\Models\Transactions\Account;
 use App\Models\Transactions\Category;
 use App\Models\Transactions\Transaction;
 use App\Tables\Columns\MoneyColumn;
@@ -40,7 +41,12 @@ class TransactionResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('account_id')
                             ->label('Conta')
-                            ->relationship('account', 'name')
+                            ->relationship(
+                                name: 'account',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn(Builder $query) => $query
+                                    ->where('user_id', auth()->user()->id)
+                            )
                             ->native(false)
                             ->required(),
                         Forms\Components\Select::make('category_id')
@@ -122,7 +128,21 @@ class TransactionResource extends Resource
 
                 Tables\Filters\SelectFilter::make('category_id')
                     ->label('Categorias')
-                    ->options(auth()->user()->categories->pluck('name', 'id'))
+                    ->relationship(
+                        name: 'category',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn($query) => $query->where('user_id', auth()->user()->id)
+                    )
+                    ->multiple()
+                    ->preload(),
+
+                Tables\Filters\SelectFilter::make('account_id')
+                    ->label('Contas')
+                    ->relationship(
+                        name: 'account',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn($query) => $query->where('user_id', auth()->user()->id)
+                    )
                     ->multiple()
                     ->preload(),
 
@@ -138,6 +158,9 @@ class TransactionResource extends Resource
                 Tables\Grouping\Group::make('category_id')
                     ->label('Categoria')
                     ->getTitleFromRecordUsing(fn(?Transaction $record): ?string => Category::find($record->category_id)->name),
+                Tables\Grouping\Group::make('account_id')
+                    ->label('Conta')
+                    ->getTitleFromRecordUsing(fn(?Transaction $record): ?string => Account::find($record->account_id)->name),
             ])
             ->contentGrid([
                 'md' => 2,

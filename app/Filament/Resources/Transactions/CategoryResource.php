@@ -34,7 +34,12 @@ class CategoryResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('account_id')
                             ->label('Conta')
-                            ->relationship('account', 'name')
+                            ->relationship(
+                                name: 'account',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn(Builder $query) => $query
+                                    ->where('user_id', auth()->user()->id)
+                            )
                             ->required()
                             ->native(false),
                         Forms\Components\TextInput::make('name')
