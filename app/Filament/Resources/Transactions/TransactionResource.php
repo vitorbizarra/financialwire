@@ -213,6 +213,7 @@ class TransactionResource extends Resource
             Tables\Columns\TextColumn::make('date')
                 ->label('Data')
                 ->date('d/m/Y')
+                ->badge()
                 ->sortable(),
             Tables\Columns\TextColumn::make('description')
                 ->label('Descrição')
