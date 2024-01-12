@@ -50,7 +50,7 @@ class Dashboard extends BaseDashboard
                 ->action(function (Forms\Set $set) {
                     $set('startDate', null);
                     $set('endDate', null);
-                    $set('preview', false);
+                    $set('preview', null);
 
                     Notification::make()
                         ->title('Filtros limpados com sucesso!')
