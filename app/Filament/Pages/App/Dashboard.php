@@ -22,9 +22,6 @@ class Dashboard extends BaseDashboard
             ->schema([
                 Forms\Components\Section::make('Filtros')
                     ->columns(3)
-                    ->collapsible()
-                    ->collapsed()
-                    ->icon('heroicon-m-adjustments-horizontal')
                     ->iconSize(IconSize::Medium)
                     ->schema([
                         Forms\Components\DatePicker::make('startDate')
