@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Transactions;
 
 use App\Enums\TransactionType;
 use App\Filament\Resources\Transactions\TransactionResource\Pages;
+use App\Filament\Resources\Transactions\TransactionResource\Widgets;
 use App\Filament\Resources\Transactions\TransactionResource\RelationManagers;
 use App\Models\Transactions\Account;
 use App\Models\Transactions\Category;
@@ -338,6 +339,13 @@ class TransactionResource extends Resource
             'create' => Pages\CreateTransaction::route('/create'),
             'view' => Pages\ViewTransaction::route('/{record}'),
             'edit' => Pages\EditTransaction::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            Widgets\TransactionsOverview::class
         ];
     }
 

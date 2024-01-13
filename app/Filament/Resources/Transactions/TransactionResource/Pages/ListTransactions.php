@@ -4,7 +4,9 @@ namespace App\Filament\Resources\Transactions\TransactionResource\Pages;
 
 use App\Enums\TransactionType;
 use App\Filament\Resources\Transactions\TransactionResource;
+use App\Filament\Resources\Transactions\TransactionResource\Widgets;
 use Filament\Actions;
+use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Hydrat\TableLayoutToggle\Concerns\HasToggleableTable;
@@ -12,7 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ListTransactions extends ListRecords
 {
-    use HasToggleableTable;
+    use HasToggleableTable, ExposesTableToWidgets;
 
     protected static string $resource = TransactionResource::class;
 
@@ -38,6 +40,13 @@ class ListTransactions extends ListRecords
     {
         return [
             //
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            Widgets\TransactionsOverview::class
         ];
     }
 }
