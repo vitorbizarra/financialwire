@@ -30,7 +30,7 @@ class Dashboard extends BaseDashboard
                             ->label('Data inicial'),
                         Forms\Components\DatePicker::make('endDate')
                             ->label('Data final'),
-                        Forms\Components\Select::make('account')
+                        Forms\Components\Select::make('accountId')
                             ->label('Conta')
                             ->native(false)
                             ->options(auth()->user()->accounts->pluck('name', 'id')),

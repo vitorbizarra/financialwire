@@ -24,17 +24,18 @@ class MonthRevenue extends ChartWidget
 
         $startDate = $this->filters['startDate'] ?? now()->startOfMonth();
         $endDate = $this->filters['endDate'] ?? now()->endOfMonth();
+        $accountId = $this->filters['accountId'] ?? null;
         $preview = $this->filters['preview'] ?? false;
 
-        $income = $this->getPeriodAmount($startDate, $endDate, $preview, TransactionType::Income);
-        $expense = $this->getPeriodAmount($startDate, $endDate, $preview, TransactionType::Expense);
+        $income = $this->getPeriodAmount($startDate, $endDate, $preview, $accountId, TransactionType::Income);
+        $expense = $this->getPeriodAmount($startDate, $endDate, $preview, $accountId, TransactionType::Expense);
 
-        $expense->each(fn ($period) => $period->aggregate = -$period->aggregate);
+        $expense->each(fn($period) => $period->aggregate = -$period->aggregate);
 
-        $data = $income->concat($expense)->groupBy('new_date')->map(fn ($items) => [
-            'date'      => $items->first()->new_date,
+        $data = $income->concat($expense)->groupBy('new_date')->map(fn($items) => [
+            'date' => $items->first()->new_date,
             'aggregate' => $items->sum('aggregate') / 100,
-            'color'     => $this->filamentColorToHex($items->sum('aggregate') < 0 ? Color::Red : Color::Lime)
+            'color' => $this->filamentColorToHex($items->sum('aggregate') < 0 ? Color::Red : Color::Lime)
         ]);
 
         Color::Red;
@@ -42,18 +43,18 @@ class MonthRevenue extends ChartWidget
         $final = [
             'datasets' => [
                 [
-                    'label'           => 'Balance',
-                    'data'            => $data->map(fn ($period)            => $period['aggregate'])->values()->toArray(),
-                    'backgroundColor' => $data->map(fn ($period) => $period['color'])->values()->toArray(),
+                    'label' => 'Balance',
+                    'data' => $data->map(fn($period) => $period['aggregate'])->values()->toArray(),
+                    'backgroundColor' => $data->map(fn($period) => $period['color'])->values()->toArray(),
                 ],
             ],
-            'labels'   => $data->map(fn ($period)   => Carbon::parse($period['date'])->format('m/Y'))->values()->toArray(),
+            'labels' => $data->map(fn($period) => Carbon::parse($period['date'])->format('m/Y'))->values()->toArray(),
         ];
 
         return $final;
     }
 
-    private function getPeriodAmount(string $startDate, string $endDate, bool $preview, TransactionType $transactionType): Collection
+    private function getPeriodAmount(string $startDate, string $endDate, bool $preview, ?string $accountId, TransactionType $transactionType): Collection
     {
         $query = Transaction::selectRaw("
                 sum(`amount`) as `aggregate`, 
@@ -67,6 +68,10 @@ class MonthRevenue extends ChartWidget
 
         if (!$preview) {
             $query->where('finished', true);
+        }
+
+        if ($accountId) {
+            $query->where('account_id', $accountId);
         }
 
         return $query->groupBy('year', 'month')->get();
