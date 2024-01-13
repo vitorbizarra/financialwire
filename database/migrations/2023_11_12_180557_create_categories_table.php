@@ -13,7 +13,6 @@ return new class extends Migration {
         Schema::create('categories', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreignUuid('account_id')->references('id')->on('accounts')->cascadeOnDelete();
             $table->string('name');
             $table->string('slug');
             $table->string('icon');
@@ -21,7 +20,7 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['account_id', 'slug']);
+            $table->unique(['user_id', 'slug']);
         });
     }
 

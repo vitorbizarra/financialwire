@@ -30,18 +30,8 @@ class CategoryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make()
-                    ->columns(3)
+                    ->columns(2)
                     ->schema([
-                        Forms\Components\Select::make('account_id')
-                            ->label('Conta')
-                            ->relationship(
-                                name: 'account',
-                                titleAttribute: 'name',
-                                modifyQueryUsing: fn(Builder $query) => $query
-                                    ->where('user_id', auth()->user()->id)
-                            )
-                            ->required()
-                            ->native(false),
                         Forms\Components\TextInput::make('name')
                             ->label('Nome')
                             ->required()
@@ -86,9 +76,6 @@ class CategoryResource extends Resource
                     ->badge()
                     ->icon(fn($record) => $record->icon)
                     ->color(fn($record) => Color::hex($record->color)),
-                Tables\Columns\TextColumn::make('account.name')
-                    ->label('Conta')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Criado em')
                     ->dateTime('d/m/Y H:i')
