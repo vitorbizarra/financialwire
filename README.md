@@ -1,6 +1,6 @@
 # Financialwire
 
-## Versão: 0.1.0
+## Versão: 0.2.0
 
 ## Status do Projeto: 🚧 Em Andamento
 
