@@ -6,10 +6,10 @@ use Filament\Facades\Filament;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
-use Filament\Pages\Auth\EditProfile as BasePáge;
+use Filament\Pages\Auth\EditProfile as BasePage;
 use Filament\Support\Enums\VerticalAlignment;
 
-class EditProfile extends BasePáge
+class EditProfile extends BasePage
 {
     protected static string $layout = 'filament-panels::components.layout.index';
 
