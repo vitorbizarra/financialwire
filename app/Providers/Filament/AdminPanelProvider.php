@@ -6,6 +6,7 @@ use App\Filament\AvatarProviders\BoringAvatarsProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use App\Filament\Resources;
 use App\Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -34,6 +35,9 @@ class AdminPanelProvider extends PanelProvider
             ->defaultAvatarProvider(BoringAvatarsProvider::class)
             ->colors([
                 'primary' => Color::Purple,
+            ])
+            ->resources([
+                Resources\Contacts\ContactResource::class,
             ])
             ->pages([
                 Pages\Admin\Dashboard::class,
