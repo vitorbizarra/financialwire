@@ -4,4 +4,6 @@
     <livewire:web.components.about />
 
     <livewire:web.components.features />
+
+    <livewire:web.components.contact />
 </div>
