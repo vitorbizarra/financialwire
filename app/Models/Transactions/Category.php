@@ -14,16 +14,11 @@ class Category extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
 
-    protected $fillable = ['user_id', 'account_id', 'name', 'slug', 'icon', 'color'];
+    protected $fillable = ['user_id', 'name', 'slug', 'icon', 'color'];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function account(): BelongsTo
-    {
-        return $this->belongsTo(Account::class);
     }
 
     public function transactions(): HasMany

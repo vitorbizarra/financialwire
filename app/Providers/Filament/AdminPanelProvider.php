@@ -6,6 +6,7 @@ use App\Filament\AvatarProviders\BoringAvatarsProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use App\Filament\Resources;
 use App\Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -25,27 +26,24 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('app')
-            ->path('app')
+            ->id('admin')
+            ->path('admin')
             ->login()
-            ->registration(Pages\Auth\Register::class)
             ->passwordReset()
             ->profile(Pages\Auth\EditProfile::class)
-            ->topNavigation()
+            ->sidebarCollapsibleOnDesktop()
             ->defaultAvatarProvider(BoringAvatarsProvider::class)
             ->colors([
                 'primary' => Color::Purple,
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->resources([
+                Resources\Contacts\ContactResource::class,
+            ])
             ->pages([
-                Pages\Dashboard::class,
+                Pages\Admin\Dashboard::class,
             ])
             ->widgets([
-                Widgets\TransactionsOverview::class,
-                Widgets\MonthRevenue::class,
-                Widgets\CategoriesChart::class,
-                Widgets\TodayTransactions::class
+                Widgets\AccountWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

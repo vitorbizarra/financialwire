@@ -1,6 +1,6 @@
 # Financialwire
 
-## Versão: 0.1.0
+## Versão: 0.2.0
 
 ## Status do Projeto: 🚧 Em Andamento
 
@@ -56,7 +56,7 @@ ou
 Realize o clone do repositório utilizando o comando:
 
 ```bash
-git clone https://github.com/Doug-Pet-Funny/doug-pet-funny.git
+git clone https://github.com/vitorbizarra/financialwire.git
 ```
 
 #### 2. Acesse a pasta do projeto
@@ -64,7 +64,7 @@ git clone https://github.com/Doug-Pet-Funny/doug-pet-funny.git
 Acesse a pasta clonada com o utilizando o comando:
 
 ```bash
-cd doug-pet-funny
+cd financialwire
 ```
 
 #### 3. Abra o Terminal
@@ -140,7 +140,7 @@ sail npm run dev
 Realize o clone do repositório utilizando o comando:
 
 ```bash
-git clone https://github.com/Doug-Pet-Funny/doug-pet-funny.git
+git clone https://github.com/vitorbizarra/financialwire.git
 ```
 
 #### 2. Acesse a pasta do projeto
@@ -148,7 +148,7 @@ git clone https://github.com/Doug-Pet-Funny/doug-pet-funny.git
 Acesse a pasta clonada com o utilizando o comando:
 
 ```bash
-cd doug-pet-funny
+cd financialwire
 ```
 
 #### 3. Abra o Terminal

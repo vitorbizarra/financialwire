@@ -4,7 +4,9 @@ namespace App\Filament\Resources\Transactions;
 
 use App\Enums\TransactionType;
 use App\Filament\Resources\Transactions\TransactionResource\Pages;
+use App\Filament\Resources\Transactions\TransactionResource\Widgets;
 use App\Filament\Resources\Transactions\TransactionResource\RelationManagers;
+use App\Models\Transactions\Account;
 use App\Models\Transactions\Category;
 use App\Models\Transactions\Transaction;
 use App\Tables\Columns\MoneyColumn;
@@ -18,6 +20,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Leandrocfe\FilamentPtbrFormFields\Money;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use pxlrbt\FilamentExcel;
 
 class TransactionResource extends Resource
 {
@@ -38,7 +42,12 @@ class TransactionResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('account_id')
                             ->label('Conta')
-                            ->relationship('account', 'name')
+                            ->relationship(
+                                name: 'account',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn(Builder $query) => $query
+                                    ->where('user_id', auth()->user()->id)
+                            )
                             ->native(false)
                             ->required(),
                         Forms\Components\Select::make('category_id')
@@ -86,50 +95,26 @@ class TransactionResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $livewire = $table->getLivewire();
+
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => $query->where('user_id', auth()->user()->id))
             ->defaultSort('date', 'desc')
             ->defaultGroup('date')
-            ->columns([
-                Tables\Columns\ToggleColumn::make('finished')
-                    ->label('Finalizada')
-                    ->alignCenter(),
-                Tables\Columns\TextColumn::make('date')
-                    ->label('Data')
-                    ->date('d/m/Y')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('description')
-                    ->label('Descrição')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('category.name')
-                    ->label('Categoria')
-                    ->searchable()
-                    ->badge()
-                    ->icon(fn($record) => $record->category->icon)
-                    ->color(fn($record) => Color::hex($record->category->color))
-                    ->alignCenter(),
-                Tables\Columns\TextColumn::make('transaction_type')
-                    ->label('Tipo')
-                    ->badge()
-                    ->iconPosition(IconPosition::After)
-                    ->alignCenter(),
-                MoneyColumn::make('amount')
-                    ->label('Total')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('account.name')
-                    ->label('Conta')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Criado em')
-                    ->dateTime('d/m/Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Atualizado em')
-                    ->dateTime('d/m/Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ->columns(
+                $livewire->isGridLayout()
+                ? static::getGridTableColumns()
+                : static::getTableColumns()
+            )
+            ->contentGrid(
+                fn() => $livewire->isTableLayout()
+                ? null
+                : [
+                    'md' => 2,
+                    'lg' => 3,
+                    'xl' => 4,
+                ]
+            )
             ->filters([
                 Tables\Filters\Filter::make('date')
                     ->form([
@@ -144,7 +129,21 @@ class TransactionResource extends Resource
 
                 Tables\Filters\SelectFilter::make('category_id')
                     ->label('Categorias')
-                    ->options(auth()->user()->categories->pluck('name', 'id'))
+                    ->relationship(
+                        name: 'category',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn($query) => $query->where('user_id', auth()->user()->id)
+                    )
+                    ->multiple()
+                    ->preload(),
+
+                Tables\Filters\SelectFilter::make('account_id')
+                    ->label('Contas')
+                    ->relationship(
+                        name: 'account',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn($query) => $query->where('user_id', auth()->user()->id)
+                    )
                     ->multiple()
                     ->preload(),
 
@@ -160,8 +159,19 @@ class TransactionResource extends Resource
                 Tables\Grouping\Group::make('category_id')
                     ->label('Categoria')
                     ->getTitleFromRecordUsing(fn(?Transaction $record): ?string => Category::find($record->category_id)->name),
-                Tables\Grouping\Group::make('transaction_type')
-                    ->label('Tipo')
+                Tables\Grouping\Group::make('account_id')
+                    ->label('Conta')
+                    ->getTitleFromRecordUsing(fn(?Transaction $record): ?string => Account::find($record->account_id)->name),
+            ])
+            ->contentGrid([
+                'md' => 2,
+                'xl' => 3,
+            ])
+            ->paginated([
+                9,
+                18,
+                36,
+                'all',
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -171,6 +181,147 @@ class TransactionResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                static::getExcelExportAction(),
+                Tables\Actions\CreateAction::make()
+            ]);
+    }
+
+    public static function getGridTableColumns(): array
+    {
+        return [
+            Tables\Columns\Layout\Stack::make([
+                Tables\Columns\Layout\Grid::make([
+                    'lg' => 2
+                ])
+                    ->schema([
+                        Tables\Columns\TextColumn::make('date')
+                            ->label('Data')
+                            ->date('d/m/Y')
+                            ->sortable()
+                            ->badge(),
+                        Tables\Columns\TextColumn::make('transaction_type')
+                            ->label('Tipo')
+                            ->badge()
+                            ->iconPosition(IconPosition::After)
+                            ->alignEnd(),
+
+                        Tables\Columns\TextColumn::make('description')
+                            ->label('Descrição')
+                            ->searchable()
+                            ->size(Tables\Columns\TextColumn\TextColumnSize::Large),
+                        Tables\Columns\TextColumn::make('category.name')
+                            ->label('Categoria')
+                            ->searchable()
+                            ->badge()
+                            ->icon(fn($record) => $record->category->icon)
+                            ->color(fn($record) => Color::hex($record->category->color))
+                            ->alignEnd(),
+
+                        MoneyColumn::make('amount')
+                            ->label('Total')
+                            ->numeric()
+                            ->sortable()
+                            ->size(Tables\Columns\TextColumn\TextColumnSize::Medium),
+                        Tables\Columns\TextColumn::make('account.name')
+                            ->label('Conta')
+                            ->searchable()
+                            ->alignEnd()
+                            ->size(Tables\Columns\TextColumn\TextColumnSize::Medium),
+                    ]),
+            ]),
+        ];
+    }
+
+    public static function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\ToggleColumn::make('finished')
+                ->label('Finalizada')
+                ->alignCenter(),
+            Tables\Columns\TextColumn::make('date')
+                ->label('Data')
+                ->date('d/m/Y')
+                ->badge()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('description')
+                ->label('Descrição')
+                ->searchable(),
+            MoneyColumn::make('amount')
+                ->label('Total')
+                ->numeric()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('category.name')
+                ->label('Categoria')
+                ->searchable()
+                ->badge()
+                ->icon(fn($record) => $record->category->icon)
+                ->color(fn($record) => Color::hex($record->category->color)),
+            Tables\Columns\TextColumn::make('transaction_type')
+                ->label('Tipo')
+                ->badge()
+                ->iconPosition(IconPosition::After)
+                ->alignCenter(),
+            Tables\Columns\TextColumn::make('account.name')
+                ->label('Conta')
+                ->searchable(),
+            Tables\Columns\TextColumn::make('created_at')
+                ->label('Criado em')
+                ->dateTime('d/m/Y H:i')
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+            Tables\Columns\TextColumn::make('updated_at')
+                ->label('Atualizado em')
+                ->dateTime('d/m/Y H:i')
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true)
+        ];
+    }
+
+    public static function getExcelExportAction(): FilamentExcel\Actions\Tables\ExportAction
+    {
+        return FilamentExcel\Actions\Tables\ExportAction::make()
+            ->label('Exportar')
+            ->color('gray')
+            ->exports([
+                FilamentExcel\Exports\ExcelExport::make('table')
+                    ->fromTable()
+                    ->askForWriterType()
+                    ->askForFilename()
+                    ->withColumns([
+                        FilamentExcel\Columns\Column::make('finished')
+                            ->heading('Finalizada')
+                            ->formatStateUsing(fn(bool $state): string => $state ? 'Sim' : 'Não'),
+
+                        FilamentExcel\Columns\Column::make('date')
+                            ->heading('Data')
+                            ->formatStateUsing(fn(string $state): string => date('d/m/Y', strtotime($state))),
+
+                        FilamentExcel\Columns\Column::make('description')
+                            ->heading('Descrição'),
+
+                        FilamentExcel\Columns\Column::make('amount')
+                            ->heading('Total')
+                            ->formatStateUsing(fn(int $state) => 'R$ ' . number_format($state / 100, 2, decimal_separator: ',', thousands_separator: '.')),
+
+                        FilamentExcel\Columns\Column::make('category.name')
+                            ->heading('Categoria'),
+
+                        FilamentExcel\Columns\Column::make('transaction_type')
+                            ->heading('Tipo de transação'),
+
+                        FilamentExcel\Columns\Column::make('account.name')
+                            ->heading('Conta'),
+
+                        FilamentExcel\Columns\Column::make('created_at')
+                            ->heading('Criado em')
+                            ->formatStateUsing(fn(string $state): string => date('d/m/Y H:i', strtotime($state))),
+
+                        FilamentExcel\Columns\Column::make('updated_at')
+                            ->heading('Atualizado em')
+                            ->formatStateUsing(fn(string $state): string => date('d/m/Y H:i', strtotime($state))),
+                    ])
             ]);
     }
 
@@ -188,6 +339,13 @@ class TransactionResource extends Resource
             'create' => Pages\CreateTransaction::route('/create'),
             'view' => Pages\ViewTransaction::route('/{record}'),
             'edit' => Pages\EditTransaction::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            Widgets\TransactionsOverview::class
         ];
     }
 

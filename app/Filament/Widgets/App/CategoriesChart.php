@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Widgets;
+namespace App\Filament\Widgets\App;
 
 use App\Enums\TransactionType;
 use App\Models\Transactions\Category;
@@ -18,6 +18,7 @@ class CategoriesChart extends ChartWidget
     {
         $startDate = $this->filters['startDate'] ?? now()->startOfMonth();
         $endDate = $this->filters['endDate'] ?? now()->endOfMonth();
+        $accountId = $this->filters['accountId'] ?? false;
         $preview = $this->filters['preview'] ?? false;
 
         $data = [];
@@ -26,8 +27,8 @@ class CategoriesChart extends ChartWidget
 
         foreach (auth()->user()->categories()->orderBy('name')->get() as $key => $category) {
 
-            $income = $this->getCategoryAmount($category, $startDate, $endDate, $preview, TransactionType::Income);
-            $expense = $this->getCategoryAmount($category, $startDate, $endDate, $preview, TransactionType::Expense);
+            $income = $this->getCategoryAmount($category, $startDate, $endDate, $preview, $accountId, TransactionType::Income);
+            $expense = $this->getCategoryAmount($category, $startDate, $endDate, $preview, $accountId, TransactionType::Expense);
 
             $data[] = ($income - $expense) / 100;
             $backgroundColor[] = $category->color;
@@ -37,11 +38,11 @@ class CategoriesChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'data'            => $data,
+                    'data' => $data,
                     'backgroundColor' => $backgroundColor,
                 ],
             ],
-            'labels'   => $labels,
+            'labels' => $labels,
         ];
     }
 
@@ -71,7 +72,7 @@ class CategoriesChart extends ChartWidget
         JS);
     }
 
-    private function getCategoryAmount(Category $category, string $startDate, string $endDate, bool $preview, TransactionType $transactionType): int
+    private function getCategoryAmount(Category $category, string $startDate, string $endDate, bool $preview, ?string $accountId, TransactionType $transactionType): int
     {
         $query = $category
             ->transactions()
@@ -80,6 +81,10 @@ class CategoriesChart extends ChartWidget
 
         if (!$preview) {
             $query->where('finished', true);
+        }
+
+        if ($accountId) {
+            $query->where('account_id', $accountId);
         }
 
         return $query->sum('amount');

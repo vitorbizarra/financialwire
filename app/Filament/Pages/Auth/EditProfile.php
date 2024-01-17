@@ -6,12 +6,10 @@ use Filament\Facades\Filament;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
-use Filament\Pages\Auth\EditProfile as BasePáge;
+use Filament\Pages\Auth\EditProfile as BasePage;
 use Filament\Support\Enums\VerticalAlignment;
-use Illuminate\Validation\Rules\Password as RulesPassword;
-use Rawilk\FilamentPasswordInput\Password;
 
-class EditProfile extends BasePáge
+class EditProfile extends BasePage
 {
     protected static string $layout = 'filament-panels::components.layout.index';
 
@@ -50,17 +48,7 @@ class EditProfile extends BasePáge
                     ->icon('heroicon-o-lock-closed')
                     ->aside()
                     ->schema([
-                        Password::make('password')
-                            ->label(__('Password'))
-                            ->confirmed()
-                            ->columnSpanFull()
-                            ->showPasswordText(__('Show password'))
-                            ->hidePasswordText(__('Hide password'))
-                            ->regeneratePassword()
-                            ->regeneratePasswordIcon('heroicon-m-arrow-path')
-                            ->regeneratePasswordIconColor('gray')
-                            ->regeneratePasswordTooltip(__('Generate new password'))
-                            ->generatePasswordUsing(fn () => str()->password(length: 12)),
+                        $this->getPasswordFormComponent(),
                         $this->getPasswordConfirmationFormComponent()
                     ]),
 
@@ -78,10 +66,12 @@ class EditProfile extends BasePáge
                                 ->label(__('Delete Account'))
                                 ->icon('heroicon-m-trash')
                                 ->color('danger')
-                                ->disabled(fn (Get $get) => $get('deleteAccountConfirmation') != auth()->user()->email)
+                                ->disabled(fn(Get $get) => $get('deleteAccountConfirmation') != auth()->user()->email)
                                 ->action(function () {
                                     $user = auth()->user();
+
                                     auth()->logout();
+
                                     if ($user->delete()) {
                                         return redirect(Filament::getLoginUrl());
                                     }

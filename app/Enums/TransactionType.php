@@ -20,6 +20,14 @@ enum TransactionType: string implements HasLabel, HasIcon, HasColor
         };
     }
 
+    public function getPluralLabel(): ?string
+    {
+        return match ($this) {
+            self::Expense => 'Despesas',
+            self::Income => 'Receitas'
+        };
+    }
+
     public function getIcon(): ?string
     {
         return match ($this) {

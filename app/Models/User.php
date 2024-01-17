@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\UserRoles;
 use App\Models\Transactions\{Account, Category, Transaction};
 use Filament\Models\Contracts\{FilamentUser, HasAvatar, HasName};
 use Filament\Panel;
@@ -52,6 +53,7 @@ class User extends Authenticatable implements FilamentUser, HasName, HasAvatar
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'role' => UserRoles::class
     ];
 
     public function accounts(): HasMany
@@ -71,6 +73,10 @@ class User extends Authenticatable implements FilamentUser, HasName, HasAvatar
 
     public function canAccessPanel(Panel $panel): bool
     {
+        if($panel->getId() == 'admin'){
+            return $this->role == UserRoles::Admin;
+        }
+
         return true;
     }
 
