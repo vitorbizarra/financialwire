@@ -8,9 +8,6 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Pages\Auth\EditProfile as BasePáge;
 use Filament\Support\Enums\VerticalAlignment;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password as RulesPassword;
-use Rawilk\FilamentPasswordInput\Password;
 
 class EditProfile extends BasePáge
 {
@@ -51,23 +48,7 @@ class EditProfile extends BasePáge
                     ->icon('heroicon-o-lock-closed')
                     ->aside()
                     ->schema([
-                        Password::make('password')
-                            ->label(__('filament-panels::pages/auth/edit-profile.form.password.label'))
-                            ->password()
-                            ->rule(RulesPassword::default())
-                            ->autocomplete('new-password')
-                            ->dehydrated(fn($state): bool => filled($state))
-                            ->dehydrateStateUsing(fn($state): string => Hash::make($state))
-                            ->live(debounce: 500)
-                            ->same('passwordConfirmation')
-                            ->columnSpanFull()
-                            ->showPasswordText(__('Show password'))
-                            ->hidePasswordText(__('Hide password'))
-                            ->regeneratePassword()
-                            ->regeneratePasswordIcon('heroicon-m-arrow-path')
-                            ->regeneratePasswordIconColor('gray')
-                            ->regeneratePasswordTooltip(__('Generate new password'))
-                            ->generatePasswordUsing(fn() => str()->password(length: 12)),
+                        $this->getPasswordFormComponent(),
                         $this->getPasswordConfirmationFormComponent()
                     ]),
 
