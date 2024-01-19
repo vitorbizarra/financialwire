@@ -37,6 +37,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Purple,
             ])
             ->resources([
+                Resources\Content\FeatureResource::class,
                 Resources\Contacts\ContactResource::class,
             ])
             ->pages([
