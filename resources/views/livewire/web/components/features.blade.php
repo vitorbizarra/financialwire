@@ -9,7 +9,7 @@
                 financeira eficiente começa aqui.
             </p>
         </div>
-        <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
+        <div class="space-y-8 md:grid md:grid-cols-3 md:gap-6 lg:gap-12 md:space-y-0">
             <div
                 class="py-6 px-4 bg-gray-100 border border-gray-100 rounded-lg shadow text-center group hover:bg-violet-900 transition-all ease-in-out duration-300">
                 <div
