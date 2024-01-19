@@ -1,4 +1,4 @@
-<div class="container mx-auto">
+<div>
     <livewire:web.components.hero />
 
     <livewire:web.components.features />
