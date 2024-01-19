@@ -14,8 +14,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         \App\Models\User::factory()->create([
-            'first_name' => 'Foo',
-            'last_name' => 'Bar',
+            'name' => 'Foo Bar',
             'email' => 'foo@bar.com',
             'role' => UserRoles::Admin
         ]);

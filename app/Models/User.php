@@ -28,8 +28,7 @@ class User extends Authenticatable implements FilamentUser, HasName, HasAvatar
      * @var array<int, string>
      */
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'name',
         'avatar',
         'email',
         'password',
@@ -82,7 +81,7 @@ class User extends Authenticatable implements FilamentUser, HasName, HasAvatar
 
     public function getFilamentName(): string
     {
-        return "{$this->first_name} {$this->last_name}";
+        return $this->name;
     }
 
     public function getFilamentAvatarUrl(): ?string

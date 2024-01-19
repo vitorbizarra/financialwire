@@ -29,9 +29,9 @@ class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('app')
             ->login()
-            ->registration(Pages\Auth\Register::class)
+            ->registration()
             ->passwordReset()
-            ->profile(Pages\Auth\EditProfile::class)
+            ->profile()
             ->topNavigation()
             ->defaultAvatarProvider(BoringAvatarsProvider::class)
             ->colors([

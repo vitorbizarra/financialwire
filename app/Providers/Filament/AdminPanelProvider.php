@@ -30,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->passwordReset()
-            ->profile(Pages\Auth\EditProfile::class)
+            ->profile()
             ->sidebarCollapsibleOnDesktop()
             ->defaultAvatarProvider(BoringAvatarsProvider::class)
             ->colors([
