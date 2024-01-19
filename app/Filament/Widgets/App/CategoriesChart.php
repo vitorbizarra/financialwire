@@ -4,6 +4,7 @@ namespace App\Filament\Widgets\App;
 
 use App\Enums\TransactionType;
 use App\Models\Transactions\Category;
+use App\Models\User;
 use Filament\Support\RawJs;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
@@ -25,7 +26,11 @@ class CategoriesChart extends ChartWidget
         $backgroundColor = [];
         $labels = [];
 
-        foreach (auth()->user()->categories()->orderBy('name')->get() as $key => $category) {
+        $user = User::find(auth()->user()->id);
+
+        $categories = $user->categories()->whereHas('transactions')->orderBy('name')->get();
+
+        foreach ($categories as $category) {
 
             $income = $this->getCategoryAmount($category, $startDate, $endDate, $preview, $accountId, TransactionType::Income);
             $expense = $this->getCategoryAmount($category, $startDate, $endDate, $preview, $accountId, TransactionType::Expense);
