@@ -2,12 +2,16 @@
 
 namespace App\Livewire\Web\Components;
 
+use App\Models\Content\Feature;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
 class Features extends Component
 {
-    public function render()
+    public Collection $features;
+
+    public function mount()
     {
-        return view('livewire.web.components.features');
+        $this->features = Feature::orderBy('sort')->get();
     }
 }
