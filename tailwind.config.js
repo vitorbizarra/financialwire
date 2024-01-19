@@ -9,7 +9,13 @@ export default {
     "./vendor/tallstackui/tallstackui/src/**/*.php",
     "./node_modules/flowbite/**/*.js"
   ],
-  theme: {},
+  theme: {
+    extend: {
+      backgroundImage: {
+        'mockup': "url('/public/images/mockup.webp')"
+      }
+    }
+  },
   plugins: [
     require('@tailwindcss/forms'),
     require('flowbite/plugin')
