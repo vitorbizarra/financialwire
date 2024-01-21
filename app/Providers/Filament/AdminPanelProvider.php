@@ -45,6 +45,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->widgets([
                 Widgets\AccountWidget::class,
+                Widgets\Admin\LatestContacts::class,
             ])
             ->middleware([
                 EncryptCookies::class,
