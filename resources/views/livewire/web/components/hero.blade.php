@@ -5,7 +5,7 @@
                 class="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl">
                 Sua plataforma de controle financeiro
             </h1>
-            <p class="max-w-2xl mb-6 text-gray-500 md:mb-8 md:text-xl">
+            <p class="max-w-2xl mb-6 text-gray-500 md:mb-8 md:text-lg">
                 Organize suas contas, transações e mais em nossa plataforma intuitiva. <br>
                 Seu dinheiro, suas regras, sua liberdade.
             </p>
