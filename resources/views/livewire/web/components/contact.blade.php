@@ -14,31 +14,47 @@
             <label for="subject" class="form-label">
                 Nome:
             </label>
-            <input type="text" class="form-input" placeholder="Seu nome">
+            <input wire:model.lazy="form.name" type="text" placeholder="Seu nome"
+                @class(['form-input', '!border-red-500'=> $errors->has('form.name')])>
+            @error('form.name')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
 
         <div>
             <label for="email" class="form-label">
                 Seu melhor email:
             </label>
-            <input type="email" class="form-input" placeholder="eu@financialwire.com.br">
+            <input wire:model.lazy="form.email" type="email" placeholder="eu@financialwire.com.br"
+                @class(['form-input', '!border-red-500'=> $errors->has('form.email')])>
+            @error('form.email')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
 
         <div>
             <label for="subject" class="form-label">
                 Assunto:
             </label>
-            <input type="text" class="form-input" placeholder="Motivo do contato">
+            <input wire:model.lazy="form.subject" type="text" placeholder="Motivo do contato"
+                @class(['form-input', '!border-red-500'=> $errors->has('form.subject')])>
+            @error('form.subject')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
 
         <div class="sm:col-span-2">
             <label for="message" class="form-label">
                 Mensagem:
             </label>
-            <textarea rows="6" class="form-input" placeholder="Sua mensagem..."></textarea>
+            <textarea wire:model.lazy="form.message" rows="6" placeholder="Sua mensagem..."
+                @class(['form-input', '!border-red-500'=> $errors->has('form.message')])></textarea>
+            @error('form.message')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <button type="submit"
-            class="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-violet-700 sm:w-fit hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300">
+            class="form-button">
             Enviar
         </button>
     </form>

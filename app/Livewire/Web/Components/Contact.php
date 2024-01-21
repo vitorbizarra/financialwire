@@ -2,12 +2,24 @@
 
 namespace App\Livewire\Web\Components;
 
+use App\Livewire\Forms\ContactForm;
 use Livewire\Component;
+use TallStackUi\Traits\Interactions;
 
 class Contact extends Component
 {
-    public function render()
+    use Interactions;
+
+    public ContactForm $form;
+
+    public function save()
     {
-        return view('livewire.web.components.contact');
+        $this->form->store();
+
+        $this->form->reset();
+
+        $this->dialog()
+            ->success('Sucesso!', 'Contato realizado com sucesso! Em breve entraremos em contato com você!')
+            ->send();
     }
 }
