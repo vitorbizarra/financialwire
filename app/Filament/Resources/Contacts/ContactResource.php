@@ -42,11 +42,11 @@ class ContactResource extends Resource
                         Forms\Components\Placeholder::make('subject')
                             ->label('Assunto:')
                             ->content(fn(string $state): string => $state),
-                        Forms\Components\Select::make('status')
+                        Forms\Components\ToggleButtons::make('status')
                             ->label('Status:')
                             ->required()
                             ->options(ContactStatus::class)
-                            ->native(false),
+                            ->inline(),
                         Forms\Components\Placeholder::make('message')
                             ->label('Mensagem:')
                             ->content(fn(string $state): string => $state)
