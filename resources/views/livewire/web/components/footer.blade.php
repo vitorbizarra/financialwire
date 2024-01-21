@@ -26,7 +26,10 @@
             </ul>
         </div>
         <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-        <span class="block text-sm text-gray-500 sm:text-center">© 2023 <a
-                href="#" class="hover:underline">{{ env('APP_NAME') }}™</a>. All Rights Reserved.</span>
+        <span class="block text-sm text-gray-500 sm:text-center">
+            © 2023 
+            <a href="#" class="hover:underline">{{ env('APP_NAME') }}™</a>. 
+            Todos direitos reservados.
+        </span>
     </div>
 </footer>
