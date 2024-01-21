@@ -9,32 +9,33 @@
         </p>
     </div>
 
-    <form action="#" class="space-y-8">
+    <form wire:submit="save" class="space-y-4">
         <div>
-            <label for="email" class="block mb-2 text-sm font-medium text-gray-900">
-                Seu melhor email:
+            <label for="subject" class="form-label">
+                Nome:
             </label>
-            <input type="email"
-                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full p-2.5"
-                placeholder="eu@financialwire.com.br">
+            <input type="text" class="form-input" placeholder="Seu nome">
         </div>
 
         <div>
-            <label for="subject" class="block mb-2 text-sm font-medium text-gray-900">
+            <label for="email" class="form-label">
+                Seu melhor email:
+            </label>
+            <input type="email" class="form-input" placeholder="eu@financialwire.com.br">
+        </div>
+
+        <div>
+            <label for="subject" class="form-label">
                 Assunto:
             </label>
-            <input type="text"
-                class="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-violet-500 focus:border-violet-500"
-                placeholder="Motivo do contato">
+            <input type="text" class="form-input" placeholder="Motivo do contato">
         </div>
 
         <div class="sm:col-span-2">
-            <label for="message" class="block mb-2 text-sm font-medium text-gray-900">
+            <label for="message" class="form-label">
                 Mensagem:
             </label>
-            <textarea rows="6"
-                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-violet-500 focus:border-violet-500"
-                placeholder="Sua mensagem..."></textarea>
+            <textarea rows="6" class="form-input" placeholder="Sua mensagem..."></textarea>
         </div>
         <button type="submit"
             class="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-violet-700 sm:w-fit hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300">

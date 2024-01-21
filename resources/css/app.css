@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.form-input {
+    @apply block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-violet-500 focus:border-violet-500 transition-all ease-in-out duration-300
+}
+
+.form-label {
+    @apply block mb-2 text-sm font-medium text-gray-900
+}
