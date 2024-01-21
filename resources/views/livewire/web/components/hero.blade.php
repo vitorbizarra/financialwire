@@ -1,5 +1,5 @@
 <section class="relative overflow-hidden bg-white h-screen flex items-center">
-    <div class="flex flex-col container px-4 py-8 gap-8 mx-auto md:flex-row md:gap-8 xl:gap-0 md:py-16">
+    <div class="flex flex-col container px-4 py-8 gap-8 mx-auto md:flex-row md:gap-8 xl:gap-0 md:py-24">
         <div class="text-center md:text-left md:my-auto w-full md:w-7/12 z-10">
             <h1
                 class="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl">

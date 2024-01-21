@@ -1,6 +1,6 @@
 <div>
     @if ($features->count() > 0)
-    <section class="bg-violet-900 min-h-screen flex items-center py-8 md:py-16" id="features">
+    <section class="bg-violet-900 min-h-screen flex items-center py-8 md:py-24" id="features">
         <div class="mx-auto container px-6">
             <div class="max-w-screen-md mb-8 lg:mb-16">
                 <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-white">

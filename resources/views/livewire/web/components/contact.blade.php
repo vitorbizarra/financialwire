@@ -1,4 +1,4 @@
-<section class="container mx-auto grid grid-cols-1 md:grid-cols-2 px-4 py-8 md:py-16 gap-8 md:gap-16" id="contact">
+<section class="container mx-auto grid grid-cols-1 md:grid-cols-2 px-4 py-8 md:py-24 gap-8 md:gap-16" id="contact">
     <div class="max-sm:text-center">
         <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900">
             Entre em Contato
