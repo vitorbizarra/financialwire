@@ -11,8 +11,6 @@ use Illuminate\Support\HtmlString;
 
 class EditProfile extends BasePage
 {
-    protected static string $layout = 'filament-panels::components.layout.index';
-
     /**
      * @return array<int | string, string | Form>
      */
