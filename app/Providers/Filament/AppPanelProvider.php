@@ -7,6 +7,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use App\Filament\Pages;
+use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Resources;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -31,7 +32,7 @@ class AppPanelProvider extends PanelProvider
             ->login()
             ->registration()
             ->passwordReset()
-            ->profile()
+            ->profile(EditProfile::class)
             ->topNavigation()
             ->defaultAvatarProvider(BoringAvatarsProvider::class)
             ->colors([
