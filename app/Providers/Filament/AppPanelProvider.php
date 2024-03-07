@@ -2,12 +2,12 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\App\Pages\Auth\EditProfile;
+use App\Filament\App\Pages\Dashboard;
 use App\Filament\AvatarProviders\BoringAvatarsProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use App\Filament\Pages;
-use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Resources;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -32,9 +32,11 @@ class AppPanelProvider extends PanelProvider
             ->login()
             ->registration()
             ->passwordReset()
-            ->profile(EditProfile::class)
+            ->profile(page: EditProfile::class, isSimple: false)
             ->topNavigation()
             ->defaultAvatarProvider(BoringAvatarsProvider::class)
+            ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
+            ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')
             ->colors([
                 'primary' => Color::Purple,
             ])
@@ -44,7 +46,7 @@ class AppPanelProvider extends PanelProvider
                 Resources\Transactions\TransactionResource::class,
             ])
             ->pages([
-                Pages\App\Dashboard::class,
+                Dashboard::class,
             ])
             ->widgets([
                 Widgets\App\TransactionsOverview::class,

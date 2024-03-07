@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Pages\App;
+namespace App\Filament\App\Pages;
 
 use Closure;
 use Filament\Forms;
