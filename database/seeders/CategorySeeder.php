@@ -20,29 +20,29 @@ class CategorySeeder extends Seeder
             'user_id' => $user->id,
             'name' => 'Salário',
             'slug' => 'salario',
-            'icon' => 'heroicon-c-banknotes',
-            'color' => '#00fa4d',
+            'icon' => 'fas-money-bill-wave',
+            'color' => fake()->hexColor(),
         ]);
         Category::create([
             'user_id' => $user->id,
             'name' => 'Outros',
             'slug' => 'outros',
-            'icon' => 'heroicon-o-ellipsis-horizontal-circle',
-            'color' => '#d60000',
+            'icon' => 'fas-ellipsis-h',
+            'color' => fake()->hexColor(),
         ]);
         Category::create([
             'user_id' => $user->id,
             'name' => 'Cartão de Crédito',
             'slug' => 'cartao-de-credito',
-            'icon' => 'heroicon-m-credit-card',
-            'color' => '#fc7900',
+            'icon' => 'fas-credit-card',
+            'color' => fake()->hexColor(),
         ]);
         Category::create([
             'user_id' => $user->id,
             'name' => 'Educação',
             'slug' => 'educacao',
-            'icon' => 'heroicon-m-academic-cap',
-            'color' => '#6a00bd',
+            'icon' => 'fas-graduation-cap',
+            'color' => fake()->hexColor(),
         ]);
 
     }
