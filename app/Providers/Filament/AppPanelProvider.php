@@ -8,7 +8,7 @@ use App\Filament\AvatarProviders\BoringAvatarsProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use App\Filament\Resources;
+use App\Filament\App\Resources;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -39,11 +39,6 @@ class AppPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')
             ->colors([
                 'primary' => Color::Purple,
-            ])
-            ->resources([
-                Resources\Transactions\AccountResource::class,
-                Resources\Transactions\CategoryResource::class,
-                Resources\Transactions\TransactionResource::class,
             ])
             ->pages([
                 Dashboard::class,

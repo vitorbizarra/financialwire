@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\Transactions\TransactionResource\Pages;
+namespace App\Filament\App\Resources\Transactions\TransactionResource\Pages;
 
 use App\Enums\TransactionType;
-use App\Filament\Resources\Transactions\TransactionResource;
-use App\Filament\Resources\Transactions\TransactionResource\Widgets;
+use App\Filament\App\Resources\Transactions\TransactionResource;
+use App\Filament\App\Resources\Transactions\TransactionResource\Widgets;
 use Filament\Actions;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Components\Tab;

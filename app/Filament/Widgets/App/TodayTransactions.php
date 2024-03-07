@@ -2,7 +2,7 @@
 
 namespace App\Filament\Widgets\App;
 
-use App\Filament\Resources\Transactions\TransactionResource;
+use App\Filament\App\Resources\Transactions\TransactionResource;
 use App\Models\Transactions\Transaction;
 use App\Tables\Columns\MoneyColumn;
 use Filament\Support\Colors\Color;

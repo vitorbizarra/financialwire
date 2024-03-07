@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\Transactions;
+namespace App\Filament\App\Resources\Transactions;
 
-use App\Filament\Resources\Transactions\AccountResource\Pages;
-use App\Filament\Resources\Transactions\AccountResource\RelationManagers;
+use App\Filament\App\Resources\Transactions\AccountResource\Pages;
+use App\Filament\App\Resources\Transactions\AccountResource\RelationManagers;
 use App\Models\Transactions\Account;
 use Filament\Forms;
 use Filament\Forms\Form;

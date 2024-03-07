@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Filament\Resources\Transactions;
+namespace App\Filament\App\Resources\Transactions;
 
 use App\Enums\TransactionType;
-use App\Filament\Resources\Transactions\TransactionResource\Pages;
-use App\Filament\Resources\Transactions\TransactionResource\Widgets;
-use App\Filament\Resources\Transactions\TransactionResource\RelationManagers;
+use App\Filament\App\Resources\Transactions\TransactionResource\Pages;
+use App\Filament\App\Resources\Transactions\TransactionResource\Widgets;
+use App\Filament\App\Resources\Transactions\TransactionResource\RelationManagers;
 use App\Models\Transactions\Account;
 use App\Models\Transactions\Category;
 use App\Models\Transactions\Transaction;
