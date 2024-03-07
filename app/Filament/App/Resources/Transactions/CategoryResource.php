@@ -39,10 +39,12 @@ class CategoryResource extends Resource
                         Forms\Components\ColorPicker::make('color')
                             ->label('Cor')
                             ->required(),
-                        IconPicker::make('icon')
+                        Forms\Components\ToggleButtons::make('icon')
                             ->label('Ícone')
                             ->required()
-                            ->columns(3)
+                            ->inline()
+                            ->options(get_avaliable_icons())
+                            ->icons(get_avaliable_icons(true))
                             ->columnSpanFull(),
 
                         Forms\Components\Fieldset::make('Informações Adicionais')
