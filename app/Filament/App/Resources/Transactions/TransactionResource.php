@@ -6,6 +6,7 @@ use App\Enums\TransactionType;
 use App\Filament\App\Resources\Transactions\TransactionResource\Pages;
 use App\Filament\App\Resources\Transactions\TransactionResource\Widgets;
 use App\Filament\App\Resources\Transactions\TransactionResource\RelationManagers;
+use App\Filament\Exports\Transactions\TransactionExporter;
 use App\Models\Transactions\Account;
 use App\Models\Transactions\Category;
 use App\Models\Transactions\Transaction;
@@ -179,6 +180,11 @@ class TransactionResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                Tables\Actions\ExportBulkAction::make()
+                    ->label('Exportar')
+                    ->exporter(TransactionExporter::class)
+                    ->icon('heroicon-s-document-arrow-up')
+                    ->color('primary')
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
