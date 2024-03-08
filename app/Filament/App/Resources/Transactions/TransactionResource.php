@@ -20,8 +20,6 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Leandrocfe\FilamentPtbrFormFields\Money;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use pxlrbt\FilamentExcel;
 
 class TransactionResource extends Resource
 {
@@ -183,7 +181,6 @@ class TransactionResource extends Resource
                 ]),
             ])
             ->headerActions([
-                static::getExcelExportAction(),
                 Tables\Actions\CreateAction::make()
             ]);
     }
@@ -277,52 +274,6 @@ class TransactionResource extends Resource
                 ->sortable()
                 ->toggleable(isToggledHiddenByDefault: true)
         ];
-    }
-
-    public static function getExcelExportAction(): FilamentExcel\Actions\Tables\ExportAction
-    {
-        return FilamentExcel\Actions\Tables\ExportAction::make()
-            ->label('Exportar')
-            ->color('gray')
-            ->exports([
-                FilamentExcel\Exports\ExcelExport::make('table')
-                    ->fromTable()
-                    ->askForWriterType()
-                    ->askForFilename()
-                    ->withColumns([
-                        FilamentExcel\Columns\Column::make('finished')
-                            ->heading('Finalizada')
-                            ->formatStateUsing(fn(bool $state): string => $state ? 'Sim' : 'Não'),
-
-                        FilamentExcel\Columns\Column::make('date')
-                            ->heading('Data')
-                            ->formatStateUsing(fn(string $state): string => date('d/m/Y', strtotime($state))),
-
-                        FilamentExcel\Columns\Column::make('description')
-                            ->heading('Descrição'),
-
-                        FilamentExcel\Columns\Column::make('amount')
-                            ->heading('Total')
-                            ->formatStateUsing(fn(int $state) => 'R$ ' . number_format($state / 100, 2, decimal_separator: ',', thousands_separator: '.')),
-
-                        FilamentExcel\Columns\Column::make('category.name')
-                            ->heading('Categoria'),
-
-                        FilamentExcel\Columns\Column::make('transaction_type')
-                            ->heading('Tipo de transação'),
-
-                        FilamentExcel\Columns\Column::make('account.name')
-                            ->heading('Conta'),
-
-                        FilamentExcel\Columns\Column::make('created_at')
-                            ->heading('Criado em')
-                            ->formatStateUsing(fn(string $state): string => date('d/m/Y H:i', strtotime($state))),
-
-                        FilamentExcel\Columns\Column::make('updated_at')
-                            ->heading('Atualizado em')
-                            ->formatStateUsing(fn(string $state): string => date('d/m/Y H:i', strtotime($state))),
-                    ])
-            ]);
     }
 
     public static function getRelations(): array
