@@ -10,13 +10,34 @@ use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
 use Filament\Support\Enums\ActionSize;
 use Filament\Support\Enums\IconSize;
+use JibayMcs\FilamentTour\Tour\HasTour;
+use JibayMcs\FilamentTour\Tour;
 use Livewire\Component as Livewire;
 
 class Dashboard extends BaseDashboard
 {
-    use HasFiltersForm;
+    use HasFiltersForm, HasTour;
 
     protected static ?string $navigationIcon = 'heroicon-m-home';
+
+    public function tours(): array
+    {
+        return [
+            Tour\Tour::make('dashboard')
+                ->steps(
+
+                    Tour\Step::make()
+                        ->title("Welcome to your Dashboard!")
+                        ->description("Essa é sua"),
+
+                    Tour\Step::make('.fi-avatar')
+                        ->title('Woaw ! Here is your avatar !')
+                        ->description('You look nice !')
+                        ->icon('heroicon-o-user-circle')
+                        ->iconColor('primary')
+                ),
+        ];
+    }
 
     public function filtersForm(Form $form): Form
     {
